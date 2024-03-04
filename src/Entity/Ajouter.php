@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AjouterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -34,6 +36,14 @@ class Ajouter
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $fin_repas = null;
+
+    #[ORM\ManyToMany(targetEntity: Societe::class, inversedBy: 'ajouters')]
+    private Collection $societe;
+
+    public function __construct()
+    {
+        $this->societe = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +130,30 @@ class Ajouter
     public function setFinRepas(?\DateTimeInterface $fin_repas): static
     {
         $this->fin_repas = $fin_repas;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Societe>
+     */
+    public function getSociete(): Collection
+    {
+        return $this->societe;
+    }
+
+    public function addSociete(Societe $societe): static
+    {
+        if (!$this->societe->contains($societe)) {
+            $this->societe->add($societe);
+        }
+
+        return $this;
+    }
+
+    public function removeSociete(Societe $societe): static
+    {
+        $this->societe->removeElement($societe);
 
         return $this;
     }

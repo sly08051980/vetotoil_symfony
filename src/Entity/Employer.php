@@ -38,6 +38,9 @@ class Employer
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_creation_employer = null;
 
+    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    private ?User $user = null;
+
 
 
     public function getId(): ?int
@@ -137,6 +140,18 @@ class Employer
     public function setDateCreationEmployer(\DateTimeInterface $date_creation_employer): static
     {
         $this->date_creation_employer = $date_creation_employer;
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }
