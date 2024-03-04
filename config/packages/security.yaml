@@ -37,6 +37,7 @@ security:
     access_control:
          - { path: ^/patient, roles: ROLE_PATIENT }
          - { path: ^/societe, roles: ROLE_SOCIETE }
+         - { path: ^/employer, roles: ROLE_EMPLOYER }
 
 when@test:
     security:
