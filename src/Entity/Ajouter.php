@@ -3,8 +3,6 @@
 namespace App\Entity;
 
 use App\Repository\AjouterRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -20,13 +18,13 @@ class Ajouter
     private ?string $jours_travailler = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $date_entree_employer = null;
+    private ?\DateTimeInterface $date_entre_employer = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_sortie_employer = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $date_debut__vacance = null;
+    private ?\DateTimeInterface $date_debut_vacance = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin_vacance = null;
@@ -35,15 +33,15 @@ class Ajouter
     private ?\DateTimeInterface $debut_repas = null;
 
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $fin_repas = null;
+    private ?\DateTimeInterface $date_fin_repas = null;
 
-    #[ORM\ManyToMany(targetEntity: Societe::class, inversedBy: 'ajouters')]
-    private Collection $societe;
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Societe $societe = null;
 
-    public function __construct()
-    {
-        $this->societe = new ArrayCollection();
-    }
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Employer $employer = null;
+
+
 
     public function getId(): ?int
     {
@@ -62,14 +60,14 @@ class Ajouter
         return $this;
     }
 
-    public function getDateEntreeEmployer(): ?\DateTimeInterface
+    public function getDateEntreEmployer(): ?\DateTimeInterface
     {
-        return $this->date_entree_employer;
+        return $this->date_entre_employer;
     }
 
-    public function setDateEntreeEmployer(\DateTimeInterface $date_entree_employer): static
+    public function setDateEntreEmployer(\DateTimeInterface $date_entre_employer): static
     {
-        $this->date_entree_employer = $date_entree_employer;
+        $this->date_entre_employer = $date_entre_employer;
 
         return $this;
     }
@@ -88,12 +86,12 @@ class Ajouter
 
     public function getDateDebutVacance(): ?\DateTimeInterface
     {
-        return $this->date_debut__vacance;
+        return $this->date_debut_vacance;
     }
 
-    public function setDateDebutVacance(?\DateTimeInterface $date_debut__vacance): static
+    public function setDateDebutVacance(?\DateTimeInterface $date_debut_vacance): static
     {
-        $this->date_debut__vacance = $date_debut__vacance;
+        $this->date_debut_vacance = $date_debut_vacance;
 
         return $this;
     }
@@ -122,39 +120,41 @@ class Ajouter
         return $this;
     }
 
-    public function getFinRepas(): ?\DateTimeInterface
+    public function getDateFinRepas(): ?\DateTimeInterface
     {
-        return $this->fin_repas;
+        return $this->date_fin_repas;
     }
 
-    public function setFinRepas(?\DateTimeInterface $fin_repas): static
+    public function setDateFinRepas(?\DateTimeInterface $date_fin_repas): static
     {
-        $this->fin_repas = $fin_repas;
+        $this->date_fin_repas = $date_fin_repas;
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, Societe>
-     */
-    public function getSociete(): Collection
+    public function getSociete(): ?Societe
     {
         return $this->societe;
     }
 
-    public function addSociete(Societe $societe): static
+    public function setSociete(?Societe $societe): static
     {
-        if (!$this->societe->contains($societe)) {
-            $this->societe->add($societe);
-        }
+        $this->societe = $societe;
 
         return $this;
     }
 
-    public function removeSociete(Societe $societe): static
+    public function getEmployer(): ?Employer
     {
-        $this->societe->removeElement($societe);
+        return $this->employer;
+    }
+
+    public function setEmployer(?Employer $employer): static
+    {
+        $this->employer = $employer;
 
         return $this;
     }
+
+
 }

@@ -60,13 +60,17 @@ class Societe
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\ManyToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]
+    #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]
     private Collection $ajouters;
 
     public function __construct()
     {
         $this->ajouters = new ArrayCollection();
     }
+
+ 
+
+  
 
     public function getId(): ?int
     {
@@ -254,7 +258,7 @@ class Societe
     {
         if (!$this->ajouters->contains($ajouter)) {
             $this->ajouters->add($ajouter);
-            $ajouter->addSociete($this);
+            $ajouter->setSociete($this);
         }
 
         return $this;
@@ -263,9 +267,13 @@ class Societe
     public function removeAjouter(Ajouter $ajouter): static
     {
         if ($this->ajouters->removeElement($ajouter)) {
-            $ajouter->removeSociete($this);
+            // set the owning side to null (unless already changed)
+            if ($ajouter->getSociete() === $this) {
+                $ajouter->setSociete(null);
+            }
         }
 
         return $this;
     }
+
 }

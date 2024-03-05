@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Patient;
 use App\Entity\Societe;
 use App\Entity\Employer;
+use App\Form\EmployerType;
 use App\Form\PatientType;
 use App\Form\SocieteType;
 use App\Repository\EmployerRepository;
@@ -28,7 +29,7 @@ class FullRegistrationController extends AbstractController
         $this->security = $security;
     }
     #[Route('/full/registration', name: 'app_full_registration')]
-    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository,EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository, EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $user = $security->getUser();
         if ($user && in_array('ROLE_PATIENT', $user->getRoles())) {
@@ -47,7 +48,6 @@ class FullRegistrationController extends AbstractController
                     $entityManager->persist($user);
                     $entityManager->flush();
                     return $this->redirectToRoute('app_home', ['patient' => $patient,]);
-
                 }
                 return $this->render('full_registration/patient.html.twig', [
                     'controller_name' => 'FullRegistrationController',
@@ -56,9 +56,17 @@ class FullRegistrationController extends AbstractController
             }
         } else if ($user && in_array('ROLE_SOCIETE', $user->getRoles())) {
             $societe = $societeRepository->findOneBy(['user' => $user]);
+            if ($societe->getDateResiliationSociete()!==null){
+                return $this->redirectToRoute('app_logout');
+            }
             if ($societe) {
-                return $this->redirectToRoute('app_home');
-
+                if ($societe->getDateValidationSociete() == null) {
+                    return $this->render('full_registration/societeattente.html.twig', [
+                        'controller_name' => 'HomeController',
+                    ]);
+                } else {
+                    return $this->redirectToRoute('app_home');
+                }
             } else {
                 $user = new Societe();
                 $user->setDateCreationSociete(new \DateTime());
@@ -76,17 +84,25 @@ class FullRegistrationController extends AbstractController
                     'form' => $form->createView(),
                 ]);
             }
-        } else if($user && in_array('ROLE_EMPLOYER',$user->getRoles())){
-            $employer =$employerRepository->findOneBy(['user'=>$user]);
-            if($employer){
+        } else if ($user && in_array('ROLE_EMPLOYER', $user->getRoles())) {
+            $employer = $employerRepository->findOneBy(['user' => $user]);
+            if ($employer) {
                 return $this->redirectToRoute('app_route');
-
-            }else{
-                $user =new Employer();
+            } else {
+                $user = new Employer();
                 $user->setDateCreationEmployer(new \DateTime());
                 $users = $this->security->getUser();
                 $user->setUser($users);
-                $form=$this->createForm();
+                $form = $this->createForm(EmployerType::class,$user);
+                if ($form->isSubmitted() && $form->isValid()) {
+                    $entityManager->persist($user);
+                    $entityManager->flush();
+                    return $this->redirectToRoute('app_home');
+                }
+                return $this->render('full_registration/employer.html.twig', [
+                    'controller_name' => 'FullRegistrationController',
+                    'form' => $form->createView(),
+                ]);
             }
         }
 
