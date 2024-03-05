@@ -26,10 +26,10 @@ class AjouterType extends AbstractType
                 'class' => Societe::class,
 'choice_label' => 'id',
             ])
-            ->add('employer', EntityType::class, [
-                'class' => Employer::class,
-'choice_label' => 'id',
-            ])
+//             ->add('employer', EntityType::class, [
+//                 'class' => Employer::class,
+// 'choice_label' => 'id',
+//             ])
         ;
     }
 

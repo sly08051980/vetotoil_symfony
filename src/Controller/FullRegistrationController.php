@@ -90,6 +90,7 @@ class FullRegistrationController extends AbstractController
                 return $this->redirectToRoute('app_route');
             } else {
                 $user = new Employer();
+                
                 $user->setDateCreationEmployer(new \DateTime());
                 $users = $this->security->getUser();
                 $user->setUser($users);
