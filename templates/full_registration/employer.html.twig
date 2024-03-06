@@ -1,7 +1,38 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FullRegistrationController!{% endblock %}
+{% block title %}Hello FullRegistrationController!
+{% endblock %}
 
 {% block body %}
-{{ form(form) }}
+	{# {{ form(form) }} #}
+
+	<div class="container pb-5 pt-5" id="inscription">
+		<div class="row pb-5 ">
+			<div class="card custom-box-shadow">
+				<div class="col-12 justify-content-center py-5">
+					<h1 class="text-center">Inscription</h1>
+				</div>
+			</div>
+		</div>
+		{{ form_errors(form) }}
+		{{ form_start(form) }}
+		<div class="card custom-box-shadow">
+			<div class="row justify-content-center">
+				<div class="col-lg-6">
+                {{ form_row(form.adresse_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.complement_adresse_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.code_postal_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.ville_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.telephone_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.profession_employer,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.images,{'label_attr': {'class': 'label-large'}}) }}
+{{ form_row(form.submit,{'label_attr': {'class': 'label-large'}}) }}
+
+                </div>
+
+
+			</div>
+		</div>
+		{{ form_end(form) }}
+	</div>
 {% endblock %}

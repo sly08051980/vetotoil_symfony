@@ -6,6 +6,7 @@ use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,9 +30,18 @@ class RegistrationFormType extends AbstractType
     
 
         $builder
-            ->add('email')
-            ->add('nom')
-            ->add('prenom')
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('prenom', TextType::class, [
+                'label' => 'Prenom',
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,
                 'constraints' => [
@@ -61,15 +71,19 @@ class RegistrationFormType extends AbstractType
             ['label'=>'Valider'
             ])
             ->add('roles', ChoiceType::class, [
+                'attr' => [
+                    'hidden' => true,
+                ],
                 'choices' => [
                     'Patient' => 'ROLE_PATIENT',
                     'Société' => 'ROLE_SOCIETE',
                     'Employé' => 'ROLE_EMPLOYER',
+                    
                 ],
                 'expanded' => true,
                 'multiple' => true,
-                'label' => 'Rôles',
                 'data' => $defaultRoles,
+               
             ]);
         ;
        
