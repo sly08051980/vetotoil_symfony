@@ -56,9 +56,9 @@ class FullRegistrationController extends AbstractController
             }
         } else if ($user && in_array('ROLE_SOCIETE', $user->getRoles())) {
             $societe = $societeRepository->findOneBy(['user' => $user]);
-            if ($societe->getDateResiliationSociete()!==null){
-                return $this->redirectToRoute('app_logout');
-            }
+            // if ($societe->getDateResiliationSociete()!==null){
+            //     return $this->redirectToRoute('app_logout');
+            // }
             if ($societe) {
                 if ($societe->getDateValidationSociete() == null) {
                     return $this->render('full_registration/societeattente.html.twig', [
@@ -87,7 +87,7 @@ class FullRegistrationController extends AbstractController
         } else if ($user && in_array('ROLE_EMPLOYER', $user->getRoles())) {
             $employer = $employerRepository->findOneBy(['user' => $user]);
             if ($employer) {
-                return $this->redirectToRoute('app_route');
+                return $this->redirectToRoute('app_home');
             } else {
                 $user = new Employer();
                 
@@ -95,6 +95,7 @@ class FullRegistrationController extends AbstractController
                 $users = $this->security->getUser();
                 $user->setUser($users);
                 $form = $this->createForm(EmployerType::class,$user);
+                $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {
                     $entityManager->persist($user);
                     $entityManager->flush();

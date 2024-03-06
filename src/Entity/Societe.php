@@ -246,34 +246,5 @@ class Societe
         return $this;
     }
 
-    /**
-     * @return Collection<int, Ajouter>
-     */
-    public function getAjouters(): Collection
-    {
-        return $this->ajouters;
-    }
-
-    public function addAjouter(Ajouter $ajouter): static
-    {
-        if (!$this->ajouters->contains($ajouter)) {
-            $this->ajouters->add($ajouter);
-            $ajouter->setSociete($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAjouter(Ajouter $ajouter): static
-    {
-        if ($this->ajouters->removeElement($ajouter)) {
-            // set the owning side to null (unless already changed)
-            if ($ajouter->getSociete() === $this) {
-                $ajouter->setSociete(null);
-            }
-        }
-
-        return $this;
-    }
 
 }

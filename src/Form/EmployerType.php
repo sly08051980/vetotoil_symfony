@@ -24,19 +24,7 @@ class EmployerType extends AbstractType
             ->add('profession_employer')
             ->add('images')
             ->add('date_creation_employer')
-            ->add('user', EntityType::class, [
-                'class' => User::class,
-'choice_label' => 'id',
-            ])
 
-       
-            ->add('ajouters', CollectionType::class, [
-                'entry_type' => AjouterType::class,
-                'entry_options' => ['label' => false],
-                'allow_add' => true,
-                'allow_delete' => true,
-                'by_reference' => false,
-            ])
             ->add('submit', SubmitType::class,
             ['label'=>'Valider'
             ])
