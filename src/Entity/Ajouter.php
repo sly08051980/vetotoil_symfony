@@ -14,8 +14,10 @@ class Ajouter
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $jours_travailler = null;
+/**
+ * @ORM\Column(type="json")
+ */
+private $jours_travailler = [];
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_entre_employer = null;
@@ -52,15 +54,15 @@ class Ajouter
         return $this->id;
     }
 
-    public function getJoursTravailler(): ?string
+    public function getJoursTravailler(): array
     {
         return $this->jours_travailler;
     }
-
-    public function setJoursTravailler(string $jours_travailler): static
+    
+    public function setJoursTravailler(array $jours_travailler): self
     {
         $this->jours_travailler = $jours_travailler;
-
+    
         return $this;
     }
 
