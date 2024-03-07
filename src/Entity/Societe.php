@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SocieteRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -57,6 +59,18 @@ class Societe
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
+
+    #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]
+    private Collection $ajouters;
+
+    public function __construct()
+    {
+        $this->ajouters = new ArrayCollection();
+    }
+
+ 
+
+  
 
     public function getId(): ?int
     {
@@ -231,4 +245,6 @@ class Societe
 
         return $this;
     }
+
+
 }

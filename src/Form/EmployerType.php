@@ -2,14 +2,16 @@
 
 namespace App\Form;
 
-use App\Entity\Patient;
+use App\Entity\Employer;
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
@@ -17,30 +19,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
 
-class PatientType extends AbstractType
+class EmployerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-
-            ->add('adresse_patient', TextType::class, [
+            ->add('adresse_employer', TextType::class, [
                 'label' => 'Adresse',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('complement_adresse_patient', TextType::class, [
+            ->add('complement_adresse_employer', TextType::class, [
                 'label' => 'Complement Adresse',
                 'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('code_postal_patient', TextType::class, [
+            ->add('code_postal_employer', TextType::class, [
                 'label' => 'Code Postal',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('ville_patient', TextType::class, [
+            ->add('ville_employer', TextType::class, [
                 'label' => 'Ville',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('telephone_patient', TelType::class, [
+            ->add('telephone_employer', TelType::class, [
                 'label' => 'Numéro de téléphone',
                 'constraints' => [
                     new Length(['min' => 10, 'max' => 10]),
@@ -51,7 +52,17 @@ class PatientType extends AbstractType
                 ],
                 'attr' => ['class' => 'form-control']
                 ])
-            ->add('date_creation_patient', DateType::class,[
+            ->add('profession_employer', ChoiceType::class, [
+                'label' => 'Profession',
+                'choices' => [
+                    'Choisissez...' => null,
+                    'Vétérinaire' => 'Vétérinaire',
+                    'Toiletteur' => 'Toiletteur',
+                ],
+                'attr' => ['class' => 'form-select'],
+            ])
+            ->add('images')
+            ->add('date_creation_employer', DateType::class,[
                 'attr' => [
                     'hidden' => true,
                     'label' => false,
@@ -59,28 +70,20 @@ class PatientType extends AbstractType
               
             ]
             )
-            ->add('date_fin_patient', DateType::class,[
-                'attr' => [
-                    'hidden' => true,
-                    'label' => false,
-                ]
-              
-            ]
-            )
-            ->add('submit', SubmitType::class,
-['label'=>'Valider'
-])
 
+            ->add('submit', SubmitType::class,
+            ['label'=>'Valider'
+            ])
         ;
         $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
             $user = $event->getData();
        
             
-            $user->setNom(validate_form($user->adresse_patient()));
-            $user->setPrenom(validate_form($user->complement_adresse_patient()));
-            $user->setPrenom(validate_form($user->code_postal_patient()));
-            $user->setPrenom(validate_form($user->ville_patient()));
-            $user->setPrenom(validate_form($user->telephone_patient()));
+            $user->setNom(validate_form($user->adresse_employer()));
+            $user->setPrenom(validate_form($user->complement_adresse_employer()));
+            $user->setPrenom(validate_form($user->code_postal_employer()));
+            $user->setPrenom(validate_form($user->ville_employer()));
+            $user->setPrenom(validate_form($user->telephone_employer()));
             $event->setData($user);
         });
 
@@ -89,7 +92,8 @@ class PatientType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Patient::class,
+            'data_class' => Employer::class,
+           
         ]);
     }
 }

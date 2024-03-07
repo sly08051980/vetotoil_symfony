@@ -1,19 +1,39 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Register
+{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.email) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+	<div class="container pb-5 pt-5" id="inscription">
+		<div class="row pb-5 ">
+			<div class="card custom-box-shadow">
+				<div class="col-12 justify-content-center py-5">
+					<h1 class="text-center">Inscription</h1>
+			
+					
+				</div>
+			</div>
+		</div>
+		{{ form_errors(registrationForm) }}
+		{{ form_start(registrationForm) }}
+		<div class="card custom-box-shadow">
+			<div class="row justify-content-center">
+				<div class="col-lg-6">
+					{{ form_row(registrationForm.nom,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.prenom,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.email,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.plainPassword.first, { 'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.plainPassword.second, { 'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.agreeTerms,{'label_attr': {'class': 'label-large'}}) }}
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+				</div>
+			</div>
+
+		</div>
+
+		{{ form_end(registrationForm) }}
+
+	</div>
 {% endblock %}

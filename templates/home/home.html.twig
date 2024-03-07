@@ -126,8 +126,11 @@
 				</div>
 				<div class="row justify-content-center py-5">
 					<div class="col-md-4 col-12 text-center align-self-center pt-2">
-						<a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}">
-							<button type="button" class="btn btn-custom rounded-pill">Inscription</button>
+					
+									 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+    <input type="hidden" name="type" value="patient">
+    <button type="submit">Inscription</button>
+</form>
 						</a>
 					</div>
 					<div class="col-md-4 col-12 text-center align-self-center pt-2">
@@ -171,7 +174,11 @@
 		<div class="row justify-content-center">
     <div class="col-12 col-lg-4 text-center my-4">
          {# <a href="{{ path('app_register_societe')}}" class="btn btn-custom rounded-pill">  #}
-		 <a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}" class="btn btn-custom rounded-pill">
+		 {# <a href="{{ path('app_register') }}" class="btn btn-custom rounded-pill"> #}
+		 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+    <input type="hidden" name="type" value="societe">
+    <button type="submit">Inscription pour Sociétés</button>
+</form>
         Découvrir VETOTOIL Pour professionnel
         {# </a> #}
     </div>

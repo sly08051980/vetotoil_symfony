@@ -5,9 +5,16 @@ namespace App\Form;
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Component\Validator\Constraints\Length;
@@ -17,10 +24,28 @@ class RegistrationFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
+
+        $defaultRoles = match ($options['type']) {
+            'societe' => ['ROLE_SOCIETE'],
+            'patient' => ['ROLE_PATIENT'],
+            'employer' => ['ROLE_EMPLOYER'],
+            default => ['ROLE_USER'],
+        };
+    
+
         $builder
-            ->add('email')
-            ->add('nom')
-            ->add('prenom')
+            ->add('email', EmailType::class, [
+                'label' => 'Email',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('nom', TextType::class, [
+                'label' => 'Nom',
+                'attr' => ['class' => 'form-control']
+            ])
+            ->add('prenom', TextType::class, [
+                'label' => 'Prenom',
+                'attr' => ['class' => 'form-control']
+            ])
             ->add('agreeTerms', CheckboxType::class, [
                                 'mapped' => false,
                 'constraints' => [
@@ -29,9 +54,10 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('plainPassword', PasswordType::class, [
-                                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
+            ->add('plainPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'first_options' => ['label' => 'Password','attr' => ['class' => 'form-control']],
+                'second_options' => ['label' => 'Repeat Password','attr' => ['class' => 'form-control']],
                 'mapped' => false,
                 'attr' => ['autocomplete' => 'new-password'],
                 'constraints' => [
@@ -49,13 +75,40 @@ class RegistrationFormType extends AbstractType
             ->add('submit', SubmitType::class,
             ['label'=>'Valider'
             ])
-        ;
-    }
+            ->add('roles', ChoiceType::class, [
+                'attr' => [
+                    'hidden' => true,
+                ],
+                'choices' => [
+                    'Patient' => 'ROLE_PATIENT',
+                    'Société' => 'ROLE_SOCIETE',
+                    'Employé' => 'ROLE_EMPLOYER',
+                    
+                ],
+                'expanded' => true,
+                'multiple' => true,
+                'data' => $defaultRoles,
+               
+            ]);
+            $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                $user = $event->getData();
+           
+                
+                $user->setNom(validate_form($user->getNom()));
+                $user->setPrenom(validate_form($user->getPrenom()));
+                $user->setEmail(email_form($user->getEmail()));
+                $event->setData($user);
+            });
+    
+        }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => User::class,
+            'type' => null, 
+        
+           
         ]);
     }
 }
