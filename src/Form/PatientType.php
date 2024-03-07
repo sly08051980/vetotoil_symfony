@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\Patient;
 use App\Entity\User;
-use Doctrine\DBAL\Types\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -59,14 +59,15 @@ class PatientType extends AbstractType
               
             ]
             )
-            ->add('date_fin_patient', DateType::class,[
-                'attr' => [
-                    'hidden' => true,
-                    'label' => false,
-                ]
+            // ->add('date_fin_patient', DateType::class,[
+            //     'attr' => [
+            //         'hidden' => true,
+            //         'label' => false,
+            //         'required' => false,
+            //     ]
               
-            ]
-            )
+            // ]
+            // )
             ->add('submit', SubmitType::class,
 ['label'=>'Valider'
 ])
@@ -76,11 +77,11 @@ class PatientType extends AbstractType
             $user = $event->getData();
        
             
-            $user->setNom(validate_form($user->adresse_patient()));
-            $user->setPrenom(validate_form($user->complement_adresse_patient()));
-            $user->setPrenom(validate_form($user->code_postal_patient()));
-            $user->setPrenom(validate_form($user->ville_patient()));
-            $user->setPrenom(validate_form($user->telephone_patient()));
+            $user->setAdressePatient(validate_form($user->getAdressePatient()));
+            $user->setComplementAdressePatient(validate_form($user->getComplementAdressePatient()));
+            $user->setCodePostalPatient(validate_form($user->getCodePostalPatient()));
+            $user->setVillePatient(validate_form($user->getVillePatient()));
+            $user->setTelephonePatient(validate_form($user->getTelephonePatient()));
             $event->setData($user);
         });
 

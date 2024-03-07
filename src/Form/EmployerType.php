@@ -79,11 +79,11 @@ class EmployerType extends AbstractType
             $user = $event->getData();
        
             
-            $user->setNom(validate_form($user->adresse_employer()));
-            $user->setPrenom(validate_form($user->complement_adresse_employer()));
-            $user->setPrenom(validate_form($user->code_postal_employer()));
-            $user->setPrenom(validate_form($user->ville_employer()));
-            $user->setPrenom(validate_form($user->telephone_employer()));
+            $user->setAdresseEmployer(validate_form($user->getAdresseEmployer()));
+            $user->setComplementAdresseEmployer(validate_form($user->getComplementAdresseEmployer()));
+            $user->setCodePostalEmployer(validate_form($user->getCodePostalEmployer()));
+            $user->setVilleEmployer(validate_form($user->getVilleEmployer()));
+            $user->setTelephoneEmployer(validate_form($user->getTelephoneEmployer()));
             $event->setData($user);
         });
 

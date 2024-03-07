@@ -3,8 +3,6 @@
 namespace App\Form;
 
 use App\Entity\Societe;
-use App\Entity\User;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -14,7 +12,7 @@ use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -25,18 +23,18 @@ class SocieteType extends AbstractType
     {
         $builder
             ->add('siret', TelType::class, [
-                'label' => 'Numéro de téléphone',
+                'label' => 'Siret',
                 'constraints' => [
-                    new Length(['min' => 10, 'max' => 14]),
+                    new Length(['min' => 14, 'max' => 14]),
                     new Regex([
-                        'pattern' => '/^\d{10}$/',
+                        'pattern' => '/^\d{14}$/',
                         'message' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
                     ]),
                 ],
                 'attr' => ['class' => 'form-control']
                 ])
             ->add('nom_societe', TextType::class, [
-                'label' => 'Complement Adresse',
+                'label' => 'Nom de la Société',
                 'required' => false,
                 'attr' => ['class' => 'form-control']
             ])
@@ -67,7 +65,7 @@ class SocieteType extends AbstractType
                 'attr' => ['class' => 'form-control']
             ])
             ->add('telephone_societe', TelType::class, [
-                'label' => 'Numéro de téléphone',
+                'label' => 'Téléphone société',
                 'constraints' => [
                     new Length(['min' => 10, 'max' => 10]),
                     new Regex([
@@ -78,7 +76,7 @@ class SocieteType extends AbstractType
                 'attr' => ['class' => 'form-control']
                 ])
             ->add('telephone_dirigeant', TelType::class, [
-                'label' => 'Numéro de téléphone',
+                'label' => 'Téléphone dirigeant',
                 'constraints' => [
                     new Length(['min' => 10, 'max' => 10]),
                     new Regex([
@@ -98,25 +96,21 @@ class SocieteType extends AbstractType
 ['label'=>'Valider'
 ])
         ;
-        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-            $user = $event->getData();
-       
-            
-            $user->setNom(validate_form($user->siret()));
-            $user->setPrenom(validate_form($user->nom_societe()));
-            $user->setPrenom(validate_form($user->adresse_societe()));
-            $user->setPrenom(validate_form($user->complement_adresse_societe()));
-            $user->setPrenom(validate_form($user->code_postal_societe()));
-            $user->setPrenom(validate_form($user->ville_societe()));
-            $user->setPrenom(validate_form($user->telephone_societe()));
-            $user->setPrenom(validate_form($user->telephone_societe()));
-            $user->setPrenom(validate_form($user->telephone_dirigeant()));
-            
-            $event->setData($user);
-        });
-
+        // $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+        //     $user = $event->getData();
+        
+        //     $user->setSiret(validate_form($user->getSiret()));
+        //     $user->setNomSociete(validate_form($user->getNomSociete()));
+        //     $user->setAdresseSociete(validate_form($user->getAdresseSociete()));
+        //     $user->setComplementAdresseSociete(validate_form($user->getComplementAdresseSociete()));
+        //     $user->setCodePostalSociete(validate_form($user->getCodePostalSociete()));
+        //     $user->setVilleSociete(validate_form($user->getVilleSociete()));
+        //     $user->setTelephoneSociete(validate_form($user->getTelephoneSociete()));
+        //     $user->setTelephoneDirigeant(validate_form($user->getTelephoneDirigeant()));
+        
+        //     $event->setData($user);
+        // });
     }
-
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
