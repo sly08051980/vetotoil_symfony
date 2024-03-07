@@ -11,6 +11,8 @@
 			<div class="card custom-box-shadow">
 				<div class="col-12 justify-content-center py-5">
 					<h1 class="text-center">Inscription</h1>
+			
+					
 				</div>
 			</div>
 		</div>
@@ -22,7 +24,8 @@
 					{{ form_row(registrationForm.nom,{'label_attr': {'class': 'label-large'}}) }}
 					{{ form_row(registrationForm.prenom,{'label_attr': {'class': 'label-large'}}) }}
 					{{ form_row(registrationForm.email,{'label_attr': {'class': 'label-large'}}) }}
-					{{ form_row(registrationForm.plainPassword, { label: 'Password' ,'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.plainPassword.first, { 'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.plainPassword.second, { 'label_attr': {'class': 'label-large'}}) }}
 					{{ form_row(registrationForm.agreeTerms,{'label_attr': {'class': 'label-large'}}) }}
 
 				</div>

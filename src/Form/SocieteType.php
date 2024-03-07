@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -96,6 +98,23 @@ class SocieteType extends AbstractType
 ['label'=>'Valider'
 ])
         ;
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $user = $event->getData();
+       
+            
+            $user->setNom(validate_form($user->siret()));
+            $user->setPrenom(validate_form($user->nom_societe()));
+            $user->setPrenom(validate_form($user->adresse_societe()));
+            $user->setPrenom(validate_form($user->complement_adresse_societe()));
+            $user->setPrenom(validate_form($user->code_postal_societe()));
+            $user->setPrenom(validate_form($user->ville_societe()));
+            $user->setPrenom(validate_form($user->telephone_societe()));
+            $user->setPrenom(validate_form($user->telephone_societe()));
+            $user->setPrenom(validate_form($user->telephone_dirigeant()));
+            
+            $event->setData($user);
+        });
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -94,7 +94,8 @@ class FullRegistrationController extends AbstractController
                 $user->setDateCreationEmployer(new \DateTime());
                 $users = $this->security->getUser();
                 $user->setUser($users);
-                $form = $this->createForm(EmployerType::class,$user);
+                $onglet='true';
+                $form = $this->createForm(EmployerType::class, $user);
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {
                     $entityManager->persist($user);

@@ -18,6 +18,7 @@ class RegistrationController extends AbstractController
     {
         $user = new User();
         $type = $request->request->get('type');
+     
         $role = ['ROLE_USER'];
        
         if ($type === 'societe') {
@@ -30,15 +31,14 @@ class RegistrationController extends AbstractController
         $user->setRoles($role);
         $form = $this->createForm(RegistrationFormType::class, $user, [
             'type' => $type, 
+           
+            
         ]);
     
         $form->handleRequest($request);
     
         if ($form->isSubmitted() && $form->isValid()) {
-            // La logique pour déterminer le rôle est déjà faite, pas besoin de la répéter
-          
-    
-            // Encodage du mot de passe
+     
             $user->setPassword(
                 $userPasswordHasher->hashPassword(
                     $user,
@@ -49,13 +49,42 @@ class RegistrationController extends AbstractController
             $entityManager->persist($user);
             $entityManager->flush();
     
-            // Redirection après enregistrement
+          
             return $this->redirectToRoute('_profiler_home');
         }
     
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form,
+       
         ]);
     }
-    
+
+    #[Route('findbyemail',name : 'find_by_email')]
+    public function findEmail(Request $request, EntityManagerInterface $entityManager):Response{
+
+        $email = $request->query->get('email');
+        $nom = $request->request->get('nom');
+        $prenom = $request->request->get('prenom');
+
+        if ($email) {
+            $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+
+            if ($user && in_array('ROLE_EMPLOYER', $user->getRoles())) {
+                return $this->render('registration/useremailresult.html.twig', [
+                    'user' => $user,
+                    
+                ]);
+            } else {
+                return $this->redirectToRoute('app_register', ['type' => 'employer']);
+            }
+        }
+
+        return $this->render('registration/findbyemail.html.twig', [
+            'controller_name' => 'Recherche par Email',
+        ]);
+    }
 }
+
+  
+    
+

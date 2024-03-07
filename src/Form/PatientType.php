@@ -11,6 +11,8 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
@@ -70,6 +72,18 @@ class PatientType extends AbstractType
 ])
 
         ;
+        $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+            $user = $event->getData();
+       
+            
+            $user->setNom(validate_form($user->adresse_patient()));
+            $user->setPrenom(validate_form($user->complement_adresse_patient()));
+            $user->setPrenom(validate_form($user->code_postal_patient()));
+            $user->setPrenom(validate_form($user->ville_patient()));
+            $user->setPrenom(validate_form($user->telephone_patient()));
+            $event->setData($user);
+        });
+
     }
 
     public function configureOptions(OptionsResolver $resolver): void

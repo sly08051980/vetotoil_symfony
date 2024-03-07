@@ -81,10 +81,13 @@
 										<a class="dropdown-item" href="?controller=pro&action=gestion_employer">Gestion des employés</a>
 									</li>
 									<li>
- <form class="ms-3" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="margin: 0; padding: 0;">
-                <input type="hidden" name="type" value="employer">
-                <button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0; margin: 0; width: 100%; text-align: left;">Ajouter Employer</button>
-            </form>
+										<form class="ms-3" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="margin: 0; padding: 0;">
+											<input type="hidden" name="type" value="employer">
+											<button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0; margin: 0; width: 100%; text-align: left;">Inscrire un Employer</button>
+										</form>
+									</li>
+									<li>
+										<a href="{{ path('find_by_email') }}" class="nav-link">Ajouter Employer Par Email</a>
 									</li>
 									<li>
 										<a class="dropdown-item" href="?controller=pro&action=voir_tous_rdv_employer">Voir les RDV des employés</a>
@@ -98,23 +101,25 @@
 									</li>
 								</ul>
 							</li>
-							 <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Société
-            </a>
-            <ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-                <li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									Société
+								</a>
+								<ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+									<li>
 										<a class="dropdown-item" href="#">Modifier</a>
 									</li>
-                <li>
-                    <hr class="dropdown-divider">
-                </li>
-                <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+									<li>
+										<hr class="dropdown-divider">
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</li>
+								</ul>
 
-        </li>
+							</li>
 						{% endif %}
-						
+
 					{% endif %}
 
 				</ul>
