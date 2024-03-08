@@ -7,8 +7,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: SocieteRepository::class)]
+#[Vich\Uploadable]
 class Societe
 {
     #[ORM\Id]
@@ -45,8 +48,12 @@ class Societe
     #[ORM\Column(length: 10)]
     private ?string $telephone_dirigeant = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $images = null;
+    #[Vich\UploadableField(mapping: 'societe_images', fileNameProperty: 'imageSociete')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageSociete = null;
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_creation_societe = null;
@@ -189,17 +196,43 @@ class Societe
         return $this;
     }
 
-    public function getImages(): ?string
+
+     /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
     {
-        return $this->images;
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
-    public function setImages(?string $images): static
+    public function getImageFile(): ?File
     {
-        $this->images = $images;
-
-        return $this;
+        return $this->imageFile;
     }
+
+    public function setImageSociete(?string $imageSociete): void
+    {
+        $this->imageSociete = $imageSociete;
+    }
+
+    public function getImageSociete(): ?string
+    {
+        return $this->imageSociete;
+    }
+
+
 
     public function getDateCreationSociete(): ?\DateTimeInterface
     {

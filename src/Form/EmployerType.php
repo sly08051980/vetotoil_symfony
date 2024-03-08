@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EmployerType extends AbstractType
 {
@@ -61,7 +62,13 @@ class EmployerType extends AbstractType
                 ],
                 'attr' => ['class' => 'form-select'],
             ])
-            ->add('images')
+            ->add('imageFile',VichImageType::class,[
+                'label'=>'Photo Employer',
+                'required' => false,
+                'label_attr'=>[
+                    'class'=>'form-label mt-4'
+                ]
+            ])
             ->add('date_creation_employer', DateType::class,[
                 'attr' => [
                     'hidden' => true,

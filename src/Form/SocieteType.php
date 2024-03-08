@@ -16,6 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class SocieteType extends AbstractType
 {
@@ -86,7 +87,13 @@ class SocieteType extends AbstractType
                 ],
                 'attr' => ['class' => 'form-control']
                 ])
-            ->add('images')
+                ->add('imageFile',VichImageType::class,[
+                    'label'=>'Photo Societe',
+                    'required' => false,
+                    'label_attr'=>[
+                        'class'=>'form-label mt-4'
+                    ]
+                ])
             ->add('date_creation_societe',DateType::class, [
                 'label' => 'Date de création',
                 // 'data' => new \DateTime(), 
