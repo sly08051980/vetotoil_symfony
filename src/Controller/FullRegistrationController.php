@@ -32,10 +32,21 @@ class FullRegistrationController extends AbstractController
     public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository, EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $user = $security->getUser();
+        
         if ($user && in_array('ROLE_PATIENT', $user->getRoles())) {
             $patient = $patientRepository->findOneBy(['user' => $user]);
             if ($patient) {
-                return $this->redirectToRoute('app_home');
+                if($patient->getDateFinPatient() === null){
+
+                    return $this->redirectToRoute('app_home');
+                }else{
+                    $this->addFlash('info', 'Votre compte est désactivé');
+
+                    return $this->redirectToRoute('app_logout');
+                
+                }
+
+              
             } else {
                 $user = new Patient();
                 $user->setDateCreationPatient(new \DateTime());
@@ -113,4 +124,6 @@ class FullRegistrationController extends AbstractController
             'controller_name' => 'FullRegistrationController',
         ]);
     }
+
+   
 }

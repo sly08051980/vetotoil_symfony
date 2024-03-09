@@ -17,7 +17,11 @@
 	</div>
 	<div class="container" id="home">
 
-
+{% for message in app.flashes('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+{% endfor %}
 		<fieldset class="border p-2 mb-4 mt-4 custom-box-shadow">
 			<legend class="float-none w-auto">
 				<strong>Particulier</strong>
