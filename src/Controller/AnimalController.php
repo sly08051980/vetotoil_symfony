@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Entity\Animal;
+use App\Form\AnimalEditType;
 use App\Form\AnimalType;
-use App\Repository\PatientRepository;
+use App\Repository\AnimalRepository;
 use App\Repository\RaceRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -24,42 +26,86 @@ class AnimalController extends AbstractController
         $this->security = $security;
     }
 
-    #[Route('/animal', name: 'app_animal')]
-    public function index(Request $request,EntityManagerInterface $entityManager,Security $security,PatientRepository $patientRepository): Response
+    #[Route('/animal/ajouter', name: 'app_animal_ajouter')]
+    public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
-$animal = new Animal();
- $animal->setDateCreationAnimal(new \DateTime());
- 
-        $form = $this->createForm(AnimalType::class,$animal);
+        $animal = new Animal();
+        $animal->setDateCreationAnimal(new \DateTime());
+        $user = $this->security->getUser();
+        $form = $this->createForm(AnimalType::class, $animal, [
+            'user' => $user,
+        ]);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $user = $this->security->getUser();
-            $patient = $user->getId();
-            if ($patient) {
-                $animal->setPatient($patient); 
-            }
+        if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager->persist($animal);
             $entityManager->flush();
             return $this->redirectToRoute('app_home');
         }
         return $this->render('animal/ajouteranimal.html.twig', [
             'controller_name' => 'AnimalController',
-            'form'=>$form->createView(),
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/get-races', name: 'get_races')]
-public function getRaces(Request $request, RaceRepository $raceRepository): JsonResponse
-{
-    $typeId = $request->query->get('typeId');
-    $races = $raceRepository->findBy(['type' => $typeId]);
+    public function getRaces(Request $request, RaceRepository $raceRepository): JsonResponse
+    {
+        $typeId = $request->query->get('typeId');
+        $races = $raceRepository->findBy(['type' => $typeId]);
 
-    $data = [];
-    foreach ($races as $race) {
-        $data[] = ['id' => $race->getId(), 'name' => $race->getRaceAnimal()];
+        $data = [];
+        foreach ($races as $race) {
+            $data[] = ['id' => $race->getId(), 'name' => $race->getRaceAnimal()];
+        }
+
+        return new JsonResponse($data);
     }
 
-    return new JsonResponse($data);
-}
+    #[Route('/animal/find', name: 'app_animal_find')]
+    public function find(Request $request, Security $security, AnimalRepository $animalRepository): Response
+    {
+
+        $user = $security->getUser();
+
+        if (!$user) {
+
+            return $this->redirectToRoute('app_login');
+        }
+
+
+        $animaux = $animalRepository->findByUser($user);
+
+        return $this->render('animal/findanimal.html.twig', [
+            'animaux' => $animaux,
+        ]);
+    }
+
+    #[Route('/animal/edit/{id}', name: 'app_animal_edit')]
+    public function edit(Request $request, EntityManagerInterface $entityManager, Animal $animal, Security $security): Response
+    {
+        $user = $security->getUser();
+
+        $form = $this->createForm(AnimalEditType::class, $animal, [
+            'user' => $user,
+
+        ]);
+
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $entityManager->persist($animal);
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_animal_find');
+        }
+
+        return $this->render('animal/editanimal.html.twig', [
+            'form' => $form->createView(),
+            'animal' => $animal,
+        ]);
+    }
 }

@@ -72,6 +72,7 @@ class FullRegistrationController extends AbstractController
             // }
             if ($societe) {
                 if ($societe->getDateValidationSociete() == null) {
+                    
                     return $this->render('full_registration/societeattente.html.twig', [
                         'controller_name' => 'HomeController',
                     ]);
@@ -105,7 +106,7 @@ class FullRegistrationController extends AbstractController
                 $user->setDateCreationEmployer(new \DateTime());
                 $users = $this->security->getUser();
                 $user->setUser($users);
-                $onglet='true';
+               
                 $form = $this->createForm(EmployerType::class, $user);
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {

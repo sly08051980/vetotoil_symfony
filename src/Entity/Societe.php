@@ -75,12 +75,6 @@ class Societe
         $this->ajouters = new ArrayCollection();
     }
 
-  
-
-  
- 
-
-  
 
     public function getId(): ?int
     {

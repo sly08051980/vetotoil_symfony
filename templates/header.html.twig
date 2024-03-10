@@ -56,7 +56,7 @@
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Animal</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 									<li>
-										<a class="dropdown-item" href="?controller=animal&action=ajouter_animal">Ajouter un animal</a>
+										<a class="dropdown-item" href="{{path('app_animal_ajouter')}}">Ajouter un animal</a>
 									</li>
 									<li>
 										<a class="dropdown-item" href="?controller=animal&action=afficher_animal">Afficher un animal</a>
@@ -73,7 +73,7 @@
 								<a class="nav-link" href="?controller=home&action=contact">Contact</a>
 							</li>
 						{% endif %}
-						{% if 'ROLE_SOCIETE' in userRoles %}
+						{% if 'ROLE_SOCIETE' in userRoles  %}
 							<li class="nav-item dropdown">
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employer</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
@@ -81,13 +81,14 @@
 										<a class="dropdown-item" href="?controller=pro&action=gestion_employer">Gestion des employés</a>
 									</li>
 									<li>
-										<form class="ms-3" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="margin: 0; padding: 0;">
-											<input type="hidden" name="type" value="employer">
-											<button type="submit" class="dropdown-item" style="border: none; background: none; padding: 0; margin: 0; width: 100%; text-align: left;">Inscrire un Employer</button>
-										</form>
+									<a href="#" class="dropdown-item" id="registerEmployerLink">Inscrire un Employer</a>
+
+<form id="registerEmployerForm" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="display: none;">
+    <input type="hidden" name="type" value="employer">
+</form>
 									</li>
 									<li>
-										<a href="{{ path('find_by_email') }}" class="nav-link">Ajouter Employer Par Email</a>
+										{# <a href="{{ path('find_by_email') }}" class="dropdown-item">Ajouter Employer Par Email</a> #}
 									</li>
 									<li>
 										<a class="dropdown-item" href="?controller=pro&action=voir_tous_rdv_employer">Voir les RDV des employés</a>

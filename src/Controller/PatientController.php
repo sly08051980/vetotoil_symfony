@@ -14,10 +14,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class PatientController extends AbstractController
 {
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
     #[Route('/patient/profil', name: 'app_patient_profil')]
+    
     public function update(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
-        $user = $security->getUser();
+        $user = $this->$security->getUser();
         $userId = $user->getId();
     
         $edit = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);

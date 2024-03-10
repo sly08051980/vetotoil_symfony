@@ -39,7 +39,9 @@ class Animal
     private ?Race $race = null;
 
     #[ORM\ManyToOne(inversedBy: 'animals')]
-    private ?Patient $patient = null;
+    private ?User $user = null;
+
+
 
     public function getId(): ?int
     {
@@ -106,17 +108,7 @@ class Animal
         return $this;
     }
 
-    public function getPatient(): ?Patient
-    {
-        return $this->patient;
-    }
 
-    public function setPatient(?Patient $patient): static
-    {
-        $this->patient = $patient;
-
-        return $this;
-    }
 
       /**
      * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
@@ -151,5 +143,17 @@ class Animal
     public function getImageAnimal(): ?string
     {
         return $this->imageAnimal;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }

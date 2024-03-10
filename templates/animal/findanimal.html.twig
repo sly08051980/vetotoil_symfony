@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello AnimalController!
+{% endblock %}
+
+{% block body %}
+
+
+{% for animal in animaux %}
+    <div>{{ animal.prenomAnimal }}</div>
+    <div>{{ animal.id }}</div>
+    <a href="{{ path('app_animal_edit', {'id': animal.id}) }}" class="btn btn-primary">Éditer</a>
+{% else %}
+    <p>Aucun animal trouvé pour cet utilisateur.</p>
+{% endfor %}
+
+{% endblock %}
