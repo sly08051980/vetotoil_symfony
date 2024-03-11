@@ -48,7 +48,9 @@ class Employer
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_creation_employer = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'employer', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
+    
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'employer')]

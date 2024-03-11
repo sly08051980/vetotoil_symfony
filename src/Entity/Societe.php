@@ -64,7 +64,8 @@ class Societe
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_validation_societe = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'societe', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]

@@ -19,6 +19,9 @@ class Animal
 
     #[ORM\Column(length: 50)]
     private ?string $prenom_animal = null;
+    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: 'animals')]
+    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: false)]
+    private ?Patient $patient = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_naissance_animal = null;
@@ -154,6 +157,16 @@ class Animal
     {
         $this->user = $user;
 
+        return $this;
+    }
+    public function getPatient(): ?Patient
+    {
+        return $this->patient;
+    }
+
+    public function setPatient(?Patient $patient): self
+    {
+        $this->patient = $patient;
         return $this;
     }
 }

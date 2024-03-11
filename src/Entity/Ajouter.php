@@ -17,7 +17,7 @@ class Ajouter
 /**
  * @ORM\Column(type="json")
  */
-private $jours_travailler = [];
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_entre_employer = null;
@@ -43,6 +43,9 @@ private $jours_travailler = [];
     #[ORM\ManyToOne(inversedBy: 'ajouters')]
     private ?Employer $employer = null;
 
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $jours_travailler = null;
+
  
 
   
@@ -54,17 +57,9 @@ private $jours_travailler = [];
         return $this->id;
     }
 
-    public function getJoursTravailler(): array
-    {
-        return $this->jours_travailler;
-    }
+
     
-    public function setJoursTravailler(array $jours_travailler): self
-    {
-        $this->jours_travailler = $jours_travailler;
-    
-        return $this;
-    }
+
 
     public function getDateEntreEmployer(): ?\DateTimeInterface
     {
@@ -158,6 +153,18 @@ private $jours_travailler = [];
     public function setEmployer(?Employer $employer): static
     {
         $this->employer = $employer;
+
+        return $this;
+    }
+
+    public function getJoursTravailler(): ?array
+    {
+        return $this->jours_travailler;
+    }
+
+    public function setJoursTravailler(?array $jours_travailler): static
+    {
+        $this->jours_travailler = $jours_travailler;
 
         return $this;
     }

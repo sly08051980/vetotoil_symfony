@@ -19,48 +19,60 @@ class AjouterType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-//             ->add('jours_travailler',ChoiceType::class,[
-//                 'choices'=>[
-//                     'Lundi'=>'lundi',
-//                     'Mardi'=>'mardi',
-//                     'Mercredi'=>'mercredi',
-//                     'Jeudi'=>'jeudi',
-//                     'Vendredi'=>'vendredi',
-//                     'Samedi'=>'samedi',
-//                     'Dimanche'=>'dimanche',
-//                 ],
-//                 'multiple'=>true,
-//                 'expanded'=>true,
-//             ])
-//             ->add('date_entre_employer', DateType::class, [
-//                 // Options pour date_entre_employer, par exemple :
-//                 'widget' => 'single_text',
-//             ])
-//             ->add('date_sortie_employer')
-//             ->add('date_debut_vacance')
-//             ->add('date_fin_vacance')
-//             ->add('debut_repas')
-//             ->add('date_fin_repas')
-//             ->add('societe', EntityType::class, [
-//                 'class' => Societe::class,
-//                 'choice_label' => 'id',
-//             ])
-//             ->add('employer', EntityType::class, [
-//                 'class' => Employer::class,
-// 'choice_label' => 'id',
-//             ])
-//             ->add('submit', SubmitType::class,
-//             ['label'=>'Valider'
-//             ])
+            ->add('jours_travailler',ChoiceType::class,[
+                'choices'=>[
+                    'Lundi'=>'lundi',
+                    'Mardi'=>'mardi',
+                    'Mercredi'=>'mercredi',
+                    'Jeudi'=>'jeudi',
+                    'Vendredi'=>'vendredi',
+                    'Samedi'=>'samedi',
+                    'Dimanche'=>'dimanche',
+                ],
+                'multiple'=>true,
+                'expanded'=>true,
+            ])
+            ->add('date_entre_employer', DateType::class, [
+                
+                'widget' => 'single_text',
+                'data' => new \DateTime(),
+            ])
+            ->add('date_sortie_employer',DateType::class, [
+                'label'=>'Photo Animal',
+                'required' => false,
+               
+            ])
+            ->add('date_debut_vacance',DateType::class, [
+                'label'=>'Photo Animal',
+                'required' => false,
+               
+            ])
+            ->add('date_fin_vacance',DateType::class, [
+                'label'=>'Photo Animal',
+                'required' => false,
+               
+            ])
+            ->add('debut_repas',DateType::class, [
+                'label'=>'Photo Animal',
+                'required' => false,
+               
+            ])
+            ->add('date_fin_repas',DateType::class, [
+                'label'=>'Photo Animal',
+                'required' => false,
+               
+            ])
+
+
 
 ->add('employerId', TextType::class, [
     'data' => $options['employerId'],
     'mapped' => false,
 ])
-            ->add('societeId', TextType::class, [
-                'data' => $options['employerId'],
-                'mapped' => false,
-            ])
+->add('societeId', TextType::class, [
+    'data' => $options['societeId'], 
+    'mapped' => false,
+])
             ->add('submit', SubmitType::class,
             ['label'=>'Valider'
             ])

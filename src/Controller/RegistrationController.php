@@ -75,102 +75,61 @@ class RegistrationController extends AbstractController
         ]);
     }
 
-    // #[Route('/test', name: 'find_test')]
-    // public function some(SocieteRepository $societeRepository, Security $security, Request $request,EntityManagerInterface $entityManager): Response
-    // {
 
-    //     $user = $security->getUser();
-    //     $email = $request->query->get('email');
-    //     $nom = $request->request->get('nom');
-    //     $prenom = $request->request->get('prenom');
-        
+    #[Route('/recherche', name: 'employer_search')]
+    public function rechercheEmployer(Request $request, UserRepository $userRepository, SocieteRepository $societeRepository): Response
+    {
+        $email = $request->query->get('email');
+        $user = $userRepository->findOneByEmail($email);
+    
+        if ($user && $user->getEmployer()) {
+           
+            $societe = $societeRepository->findOneByUser($this->getUser());
+            
+            if ($societe) {
+                return $this->redirectToRoute('formulaire_ajouter', [
+                    'employerId' => $user->getEmployer()->getId(),
+                    'societeId' => $societe->getId(),
+                ]);
+            }
+        }
+    
+        return $this->render('employer/search.html.twig');
+    }
+    #[Route('/ajouter', name: 'formulaire_ajouter')]
+    public function ajouterInfo(Request $request, EmployerRepository $employerRepository, SocieteRepository $societeRepository, EntityManagerInterface $entityManager): Response
+    {
+        $employerId = $request->query->get('employerId');
+        $societeId = $request->query->get('societeId');
+    
+        $ajouter = new Ajouter(); 
+    
+        $form = $this->createForm(AjouterType::class, $ajouter, [
+            'employerId' => $employerId,
+            'societeId' => $societeId,
+        ]);
+    
+        $form->handleRequest($request);
+    
+        if ($form->isSubmitted() && $form->isValid()) {
+           
+            $employer = $employerRepository->find($employerId);
+            $societe = $societeRepository->find($societeId);
+            $ajouter->setEmployer($employer);
+            $ajouter->setSociete($societe);
+    
+            $entityManager->persist($ajouter);
+            $entityManager->flush();
+    
        
-          
-    //         if ($user && in_array('ROLE_EMPLOYER', $user->getRoles())) {
-    //             if (!$user) {
-
-    //                 return $this->redirectToRoute('app_home'); 
-    //             }
+            return $this->redirectToRoute('app_home');
+        }
+    
+        return $this->render('registration/useremailresult.html.twig', [
+            'form' => $form->createView(),
+            'employerId' => $employerId,
+            'societeId' => $societeId,
+        ]);
+    }
         
-    //             $societe = $societeRepository->findSocieteByUser($user);
-    //             if ($societe) {
-    //                 $idSociete = $societe->getId();  
-    //             $ajouter = new Ajouter();
-    //             $ajouter->setDateEntreEmployer(new \DateTime());
-    //             $ajouter->setSociete($societe);
-    //             $form = $this->createForm(AjouterType::class,$ajouter);
-
-    //             $form->handleRequest($request);
-    //             if ($form->isSubmitted() && $form->isValid()) {
-    //                 $ajouter=new Ajouter();
-                    
-    //                 $ajouter = $form->getData();
-    //                  $entityManager->persist($ajouter);
-    //                  $entityManager->flush();
-    //             }
-    //             return $this->render('registration/useremailresult.html.twig', [
-    //                 'user' => $user,
-    //                 'form' => $form->createView(),
-    //             ]);
-    //         }
-
-    //     } 
-    //     return $this->render('registration/findbyemail.html.twig', [
-    //         'controller_name' => 'Recherche par Email',
-    //     ]);
-    // }
-   
-    // #[Route('findbyemail', name: 'find_by_email')]
-    // public function findEmail(Request $request, EntityManagerInterface $entityManager,Security $security,SocieteRepository $societeRepository): Response
-    // {
-
-    //     $email = $request->query->get('email');
-    //     $nom = $request->request->get('nom');
-    //     $prenom = $request->request->get('prenom');
-    //     $user = $security->getUser();
-    //     if ($email) {
-    //         $user = $entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-    //         $societe = $societeRepository->findSocieteByUser($user);
-    //         $idSociete = $societe->getId();
-    //         dump($idSociete);
-    //             die;
-
-    //         if ($user && in_array('ROLE_EMPLOYER', $user->getRoles())) {
-               
-    //             $ajouter = new Ajouter();
-    //             $ajouter->setDateEntreEmployer(new \DateTime());
-    //             $idSociete = $societe->getId();
-    //             dump($idSociete);
-    //             die;
-    //             $form = $this->createForm(AjouterType::class,$ajouter);
-
-    //             $form->handleRequest($request);
-    //             if ($form->isSubmitted() && $form->isValid()) {
-    //                 $ajouter=new Ajouter();
-                    
-    //                 $ajouter = $form->getData();
-
-                 
-                   
-    //                  $entityManager->persist($ajouter);
-    //                  $entityManager->flush();
-    //             }
-
-    //             return $this->render('registration/useremailresult.html.twig', [
-    //                 'user' => $user,
-    //                 'form' => $form->createView(),
-
-    //             ]);
-    //         } else {
-    //             return $this->redirectToRoute('app_register', ['type' => 'employer']);
-    //         }
-    //     }
-
-    //     return $this->render('registration/findbyemail.html.twig', [
-    //         'controller_name' => 'Recherche par Email',
-    //     ]);
-    // }
-
-
-  
 }

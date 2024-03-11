@@ -42,6 +42,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'user')]
     private Collection $animals;
+    #[ORM\OneToOne(mappedBy: "user", cascade: ['persist', 'remove'])]
+ 
+private ?Societe $societe = null;
+
+
+#[ORM\OneToOne(mappedBy: "user", cascade: ['persist', 'remove'])]
+private ?Employer $employer = null;
 
     public function __construct()
     {
@@ -177,4 +184,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
     
+    public function getSociete(): ?Societe
+    {
+        return $this->societe;
+    }
+    
+    public function setSociete(?Societe $societe): self
+    {
+        $this->societe = $societe;
+    
+        return $this;
+    }
+    public function getEmployer(): ?Employer
+{
+    return $this->employer;
+}
+
+public function setEmployer(?Employer $employer): self
+{
+    $this->employer = $employer;
+
+    return $this;
+}
+
 }
