@@ -58,7 +58,7 @@ private ?Employer $employer = null;
         $this->animals = new ArrayCollection();
     }
 
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
