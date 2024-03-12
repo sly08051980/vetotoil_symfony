@@ -24,7 +24,7 @@ class PatientController extends AbstractController
     
     public function update(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
-        $user = $this->$security->getUser();
+        $user = $this->security->getUser();
         $userId = $user->getId();
     
         $edit = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);

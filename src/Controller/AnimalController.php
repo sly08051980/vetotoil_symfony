@@ -30,12 +30,20 @@ class AnimalController extends AbstractController
     #[Route('/animal/ajouter', name: 'app_animal_ajouter')]
     public function index(Request $request, EntityManagerInterface $entityManager, Security $security,PatientRepository $patientRepository): Response
     {
+        $patientId =Null;
         $animal = new Animal();
         $animal->setDateCreationAnimal(new \DateTime());
         
         $user = $this->security->getUser();
-        $patient = $user->getPatient();
        
+        $patient = $patientRepository->findPatientByUser($user);
+        if ($patient !== null) {
+           
+            $patientId = $patient->getId();
+         
+            
+            $animal->setPatient($patient);
+        }
        
         $form = $this->createForm(AnimalType::class, $animal, [
             'user' => $user,
