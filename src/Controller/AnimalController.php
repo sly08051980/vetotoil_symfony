@@ -28,7 +28,7 @@ class AnimalController extends AbstractController
     }
 
     #[Route('/animal/ajouter', name: 'app_animal_ajouter')]
-    public function index(Request $request, EntityManagerInterface $entityManager, Security $security,PatientRepository $patientRepository): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
     {
         $patientId =Null;
         $animal = new Animal();
@@ -36,14 +36,14 @@ class AnimalController extends AbstractController
         
         $user = $this->security->getUser();
        
-        $patient = $patientRepository->findPatientByUser($user);
-        if ($patient !== null) {
+        // $patient = $patientRepository->findPatientByUser($user);
+        // if ($patient !== null) {
            
-            $patientId = $patient->getId();
+        //     $patientId = $patient->getId();
          
             
-            $animal->setPatient($patient);
-        }
+        //     $animal->setPatient($patient);
+        // }
        
         $form = $this->createForm(AnimalType::class, $animal, [
             'user' => $user,
@@ -81,6 +81,7 @@ class AnimalController extends AbstractController
     {
 
         $user = $security->getUser();
+      
 
         if (!$user) {
 
@@ -88,7 +89,8 @@ class AnimalController extends AbstractController
         }
 
 
-        $animaux = $animalRepository->findByUser($user);
+        $animaux = $animalRepository->findBy(['user' => $user]);
+     
 
         return $this->render('animal/findanimal.html.twig', [
             'animaux' => $animaux,

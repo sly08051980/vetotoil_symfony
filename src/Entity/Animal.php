@@ -6,6 +6,7 @@ use App\Repository\AnimalRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\UuidV7;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: AnimalRepository::class)]
@@ -13,15 +14,16 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Animal
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 50)]
     private ?string $prenom_animal = null;
-    #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: 'animals')]
-    #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: false)]
-    private ?Patient $patient = null;
+    // #[ORM\ManyToOne(targetEntity: Patient::class, inversedBy: 'animals')]
+    // #[ORM\JoinColumn(name: "patient_id", referencedColumnName: "id", nullable: false)]
+    // private ?Patient $patient = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_naissance_animal = null;
@@ -46,7 +48,7 @@ class Animal
 
 
 
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -159,14 +161,5 @@ class Animal
 
         return $this;
     }
-    public function getPatient(): ?Patient
-    {
-        return $this->patient;
-    }
 
-    public function setPatient(?Patient $patient): self
-    {
-        $this->patient = $patient;
-        return $this;
-    }
 }

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\UuidV7;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: EmployerRepository::class)]
@@ -15,9 +16,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Employer
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $adresse_employer = null;
@@ -67,7 +69,7 @@ class Employer
 
 
 
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }

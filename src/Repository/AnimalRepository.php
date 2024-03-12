@@ -45,13 +45,5 @@ class AnimalRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
-public function findByUser($user)
-{
-    return $this->createQueryBuilder('a')
-        ->andWhere('a.user = :user')
-        ->setParameter('user', $user)
-        ->getQuery()
-        ->getResult()
-    ;
-}
+
 }

@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\UuidV7;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
@@ -15,9 +16,10 @@ use Vich\UploaderBundle\Mapping\Annotation as Vich;
 class Patient
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
   
 
@@ -51,8 +53,8 @@ class Patient
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'patient')]
-    private Collection $animals;
+    // #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'patient')]
+    // private Collection $animals;
 
     public function __construct()
     {
@@ -60,7 +62,7 @@ class Patient
     }
 
 
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }

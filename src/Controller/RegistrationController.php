@@ -74,7 +74,7 @@ class RegistrationController extends AbstractController
 
         ]);
     }
-   
+  
 
 
     #[Route('/recherche/employer', name: 'employer_search')]
@@ -88,7 +88,7 @@ class RegistrationController extends AbstractController
             $societe = $societeRepository->findOneByUser($this->getUser());
             
             if ($societe) {
-                return $this->redirectToRoute('formulaire_ajouter', [
+                return $this->redirectToRoute('employer_add', [
                     'employerId' => $user->getEmployer()->getId(),
                     'societeId' => $societe->getId(),
                 ]);
