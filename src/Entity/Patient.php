@@ -53,12 +53,16 @@ class Patient
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'patient')]
+    private Collection $rdvs;
+
     // #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'patient')]
     // private Collection $animals;
 
     public function __construct()
     {
         $this->animals = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
     }
 
 
@@ -224,6 +228,36 @@ class Patient
             // set the owning side to null (unless already changed)
             if ($animal->getPatient() === $this) {
                 $animal->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getPatient() === $this) {
+                $rdv->setPatient(null);
             }
         }
 

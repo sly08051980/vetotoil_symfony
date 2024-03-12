@@ -73,9 +73,13 @@ class Societe
     #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]
     private Collection $ajouters;
 
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'societe')]
+    private Collection $rdvs;
+
     public function __construct()
     {
         $this->ajouters = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
     }
 
 
@@ -303,6 +307,36 @@ class Societe
             // set the owning side to null (unless already changed)
             if ($ajouter->getSociete() === $this) {
                 $ajouter->setSociete(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setSociete($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getSociete() === $this) {
+                $rdv->setSociete(null);
             }
         }
 

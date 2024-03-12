@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RdvController!{% endblock %}
+
+{% block body %}
+ <div id="calendar">
+        <div class="hours">
+        {% set locale = 'fr_FR' %}
+
+
+            {% for heure in 8..17 %}
+                <div class="heure">{{ heure }}:00 </div>
+            {% endfor %}
+        </div>
+        <div class="events">
+            <!-- Affichage des événements ici -->
+        </div>
+    </div>
+{% endblock %}

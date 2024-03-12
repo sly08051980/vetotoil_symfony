@@ -14,3 +14,4 @@ function email_form($data)
     $data = htmlspecialchars($data);
     return ($data);
 }
+
