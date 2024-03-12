@@ -6,6 +6,7 @@ use App\Entity\Animal;
 use App\Form\AnimalEditType;
 use App\Form\AnimalType;
 use App\Repository\AnimalRepository;
+use App\Repository\PatientRepository;
 use App\Repository\RaceRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -27,11 +28,15 @@ class AnimalController extends AbstractController
     }
 
     #[Route('/animal/ajouter', name: 'app_animal_ajouter')]
-    public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
+    public function index(Request $request, EntityManagerInterface $entityManager, Security $security,PatientRepository $patientRepository): Response
     {
         $animal = new Animal();
         $animal->setDateCreationAnimal(new \DateTime());
+        
         $user = $this->security->getUser();
+        $patient = $user->getPatient();
+       
+       
         $form = $this->createForm(AnimalType::class, $animal, [
             'user' => $user,
         ]);

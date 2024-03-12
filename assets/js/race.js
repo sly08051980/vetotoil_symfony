@@ -1,10 +1,14 @@
-console.log("script chargé");
+console.log("script chargé race");
 
-document.addEventListener("DOMContentLoaded", function () {
+
+
+
+
+
   let boutonAnimal = document.getElementById("boutonAnimal");
 
   boutonAnimal.addEventListener("click", function () {
-    document.getElementById("afficherAnimal").classList.toggle("invisible"); // affiche la classe invisible
+    document.getElementById("displayAnimal").classList.toggle("invisible"); 
   });
 
   const typeSelect = document.getElementById("animal_type");
@@ -27,4 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
   } else {
     console.error("Element #animal_type not found");
   }
-});
+
+
+
+

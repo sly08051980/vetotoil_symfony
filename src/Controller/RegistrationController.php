@@ -74,9 +74,10 @@ class RegistrationController extends AbstractController
 
         ]);
     }
+   
 
 
-    #[Route('/recherche', name: 'employer_search')]
+    #[Route('/recherche/employer', name: 'employer_search')]
     public function rechercheEmployer(Request $request, UserRepository $userRepository, SocieteRepository $societeRepository): Response
     {
         $email = $request->query->get('email');
@@ -96,7 +97,7 @@ class RegistrationController extends AbstractController
     
         return $this->render('employer/search.html.twig');
     }
-    #[Route('/ajouter', name: 'formulaire_ajouter')]
+    #[Route('/ajouter/employer', name: 'employer_add')]
     public function ajouterInfo(Request $request, EmployerRepository $employerRepository, SocieteRepository $societeRepository, EntityManagerInterface $entityManager): Response
     {
         $employerId = $request->query->get('employerId');

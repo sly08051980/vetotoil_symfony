@@ -61,7 +61,7 @@ class AnimalType extends AbstractType
                 'class' => User::class,
 'choice_label' => 'id',
 // 'attr' => ['style' => 'display:none;'],
-'label' => false,
+'label' => 'id user',
 'data' => $user,
 
             ])
