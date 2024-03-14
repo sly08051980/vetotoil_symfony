@@ -1,5 +1,6 @@
 body {
-    background-color: #FEFEE2;
+    /* background-color: #FEFEE2; */
+    background-color: black;
 }
 .navbar,.footer {
     background: linear-gradient(white, purple);
@@ -66,6 +67,10 @@ color: white !important;
   }
   fieldset{
     background-color: white;
+  }
+  .inputsansbordure{
+    border: none; 
+    background-color: transparent;
   }
 @media only screen and (min-width: 1200px) {
     .degrader {
