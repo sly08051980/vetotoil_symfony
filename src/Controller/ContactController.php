@@ -3,42 +3,58 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
+use App\Service\MailerServicesTest;
+use Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
+
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
+
 use Symfony\Component\Routing\Attribute\Route;
 
 class ContactController extends AbstractController
 {
     #[Route('/contact', name: 'app_contact')]
-    public function index(Request $request,MailerInterface $mailer): Response
+    public function index(): Response
     {
+   /**
+     * @Route("/send-email", name="send_email")
+     */
+ 
+        $mail = new PHPMailer(true);
+$secretKeyGoogle=$_ENV['SECRET_KEY_GOOGLE'];
+$secretEmailGoogle=$_ENV['SECRET_EMAIL_GOOGLE'];
+        try {
+            //Configuration de PHPMailer
+            $mail->isSMTP();
+            $mail->Host = 'smtp.gmail.com';
+            $mail->Port = 587;
+            $mail->SMTPSecure = 'tls';
+            $mail->SMTPAuth = true;
+            $mail->Username = $secretEmailGoogle;
+            $mail->Password = $secretKeyGoogle;
 
-        $form=$this->createForm(ContactType::class);
+            //Destinataires
+            $mail->setFrom($secretEmailGoogle);
+            $mail->addAddress('regnier.sylvain@yahoo.fr');
 
-        $form->handleRequest($request);
+            //Contenu
+            $mail->isHTML(true);
+            $mail->Subject = 'Here is the subject';
+            $mail->Body    = 'test';
+            $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
-        if($form->isSubmitted() && $form->isValid()){
-           $data= $form->getData();
-           $adress =$data['email'];
-           $content =$data['content'];
-
-           $email = (new Email())
-            ->from($adress)
-            ->to('regnier.sylvain.afpa@gmail.com')
-
-            ->subject('Demande de contact')
-            ->text($content);
-
-            $mailer->send($email);
-            return $this->redirectToRoute('app_home');
+            $mail->send();
+            return new Response('Message has been sent');
+        } catch (Exception $e) {
+            return new Response("Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
         }
+    
 
-        return $this->render('contact/index.html.twig', [
-            'controller_name' => 'ContactController',
-            'formulaire'=>$form,
-        ]);
+
+        // return $this->render('contact/index.html.twig', [
+        //     'controller_name' => 'ContactController',
+           
+        // ]);
     }
 }

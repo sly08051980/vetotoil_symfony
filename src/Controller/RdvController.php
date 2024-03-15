@@ -39,7 +39,7 @@ class RdvController extends AbstractController
         $form = $this->createForm(RdvType::class);
         $form->handleRequest($request);
        
-        // Tableau de correspondance entre les jours en français et en anglais
+      
         $joursCorrespondance = [
             'lundi' => 'monday',
             'mardi' => 'tuesday',
@@ -54,9 +54,9 @@ class RdvController extends AbstractController
             $ajouter = $entityManager->getRepository(Ajouter::class)->findBy(['employer' => $employe]);
         
             $joursTravail = [];
-            // Calcul des dates pour les 7 jours suivants à partir d'aujourd'hui
+          
             for ($i = 1; $i <= 31; $i++) {
-                // Crée une nouvelle date pour chaque jour à partir d'aujourd'hui
+               
                 $date = (new DateTime())->modify("+$i day");
                 $jourActuelEnFrancais = array_search(strtolower($date->format('l')), array_map('strtolower', $joursCorrespondance), true);
         
