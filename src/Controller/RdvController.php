@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Ajouter;
 use App\Entity\Animal;
+use App\Entity\Commune;
 use App\Entity\Employer;
 use App\Entity\Patient;
 use App\Entity\Rdv;
 
 use App\Entity\Societe;
+use App\Entity\User;
 use App\Form\RdvType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
@@ -31,10 +33,12 @@ class RdvController extends AbstractController
     {
         $employes = $entityManager->getRepository(Employer::class)->findAll();
         $disponibilites = [];
+        $nom="";
+        $prenom="";
 
         $user = $this->security->getUser();
         $userId = $user->getId();
-        $edit = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);
+        $patient = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);
         $animal = $entityManager->getRepository(Animal::class)->findBy(['user'=>$user]);
         $form = $this->createForm(RdvType::class);
         $form->handleRequest($request);
@@ -49,10 +53,52 @@ class RdvController extends AbstractController
             'samedi' => 'saturday',
             'dimanche' => 'sunday',
         ];
-
-        foreach ($employes as $employe) {
-            $ajouter = $entityManager->getRepository(Ajouter::class)->findBy(['employer' => $employe]);
+        $codePostalPatient=$patient->getCodePostalPatient();
         
+        $communePatient = $entityManager->getRepository(Commune::class)->findOneBy(['code_postal_commune' => $codePostalPatient]);
+
+        if ($communePatient) {
+            $latitudePatient = $communePatient->getLatitude();
+            $longitudePatient = $communePatient->getLongitude();
+            $communes = $this->findCommunesWithinRadius($latitudePatient, $longitudePatient, 10, $entityManager);
+           
+          
+        foreach ($employes as $employe) {
+            if ($employe->getProfessionEmployer() !== 'Vétérinaire') {
+                continue; 
+            }
+            $codesPostaux = array_map(function ($commune) {
+                return $commune['code_postal_commune']; 
+            }, $communes);
+
+            $ajouterRechercheCommunes = $entityManager->getRepository(Societe::class)->findBy(['code_postal_societe' => $codesPostaux]);
+           
+            $ajouterTrie = [];
+            foreach ($ajouterRechercheCommunes as $societe) {
+                // Obtenir les employés pour chaque société trouvée
+                $employesDeLaSociete = $entityManager->getRepository(Ajouter::class)->findBy(['societe' => $societe]);
+            
+                foreach ($employesDeLaSociete as $ajout) {
+                    if ((null === $ajout->getDateSortieEmployer() || new \DateTime() < $ajout->getDateSortieEmployer())) {
+                        // Ajouter à la liste des employés à considérer
+                        // Assurez-vous de ne pas ajouter de doublons si un employé travaille pour plusieurs sociétés
+                        if (!in_array($ajout, $ajouterTrie)) {
+                            $ajouterTrie[] = $ajout;
+                        }
+                    }
+                }
+            }
+
+            $ajouterRechercheCommunes = $entityManager->getRepository(Societe::class)->findBy(['code_postal_societe' => $codesPostaux]);
+           
+
+            $ajouterRechercheEmployer = $entityManager->getRepository(Ajouter::class)->findBy(['employer' => $employe]);
+            $ajouterTrie = array_filter($ajouterRechercheEmployer, function ($ajout) {
+                return null === $ajout->getDateSortieEmployer() || new \DateTime() < $ajout->getDateSortieEmployer();
+            });
+            
+           
+            $ajouter=$ajouterTrie;
             $joursTravail = [];
           
             for ($i = 1; $i <= 31; $i++) {
@@ -60,8 +106,13 @@ class RdvController extends AbstractController
                 $date = (new DateTime())->modify("+$i day");
                 $jourActuelEnFrancais = array_search(strtolower($date->format('l')), array_map('strtolower', $joursCorrespondance), true);
         
-                foreach ($ajouter as $a) {
-                    if (in_array($jourActuelEnFrancais, array_map('strtolower', $a->getJoursTravailler()))) {
+                foreach ($ajouter as $ajout) {
+                    $societe = $ajout->getSociete();
+        $nomSociete =$societe->getNomSociete();
+        $adresseSociete = $societe->getAdresseSociete();
+      
+        
+                    if (in_array($jourActuelEnFrancais, array_map('strtolower', $ajout->getJoursTravailler()))) {
                         $joursTravail[] = $date->format('Y-m-d');
                     }
                 }
@@ -87,7 +138,20 @@ class RdvController extends AbstractController
                         }
                     }
                     if ($creneauLibre) {
-                        $disponibilites[(string)$employe->getId()] = [$jour, $heure];
+                
+                     
+                        $rechercherEmployer = $entityManager->getRepository(User::class)->find($employe->getUser());
+                        $nom = $rechercherEmployer->getNom();
+                        $prenom = $rechercherEmployer->getPrenom();
+                       
+                        $disponibilites[(string)$employe->getId()] = [
+                            $jour, 
+                            $heure,
+                            $nom,
+                            $prenom,
+                             $nomSociete,
+                         $adresseSociete];
+                       
                         $trouve = true;
                         break;
                     }
@@ -95,16 +159,40 @@ class RdvController extends AbstractController
                 if ($trouve) break;
             }
         }
-
+    }
        
         
         return $this->render('rdv/findrdv.html.twig', [
             'controller_name' => 'RdvController',
             'disponibilites' => $disponibilites,
             'employes'=>$employes,
-            'edit'=>$edit,
+            'patient'=>$patient,
+            'nom'=>$nom,
+            'prenom'=>$prenom,
             'form' => $form->createView(),
             
         ]);
+    }
+
+    public function findCommunesWithinRadius($latitude, $longitude, $radius = 10, EntityManagerInterface $entityManager)
+    {
+        $conn = $entityManager->getConnection();
+    
+        $sql = "
+            SELECT id, nom_commune, code_postal_commune,
+                   (6366 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lon)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance
+            FROM commune
+            HAVING distance < :distance
+            ORDER BY distance
+        ";
+    
+        $stmt = $conn->prepare($sql);
+        $stmt->bindValue('lat', $latitude);
+        $stmt->bindValue('lon', $longitude);
+        $stmt->bindValue('distance', $radius);
+        $result = $stmt->execute(); 
+        $results = $result->fetchAllAssociative();
+    
+        return $results;
     }
 }

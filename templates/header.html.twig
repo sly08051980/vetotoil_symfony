@@ -24,7 +24,7 @@
 							<a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}" class="nav-link">Inscription</a>
 						</li>
 						<li class="nav-item">
-							<a href="#" class="nav-link">Contact</a>
+							<a href="{{ path('app_contact')}}" class="nav-link">Contact</a>
 						</li>
 					{% endif %}
 					{% if app.user %}
@@ -70,7 +70,7 @@
 								<a class="nav-link" href="{{path('app_patient_profil')}}">Mon Profil</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="?controller=home&action=contact">Contact</a>
+								<a class="nav-link" href="{{ path('app_contact')}}">Contact</a>
 							</li>
 						{% endif %}
 						{% if 'ROLE_SOCIETE' in userRoles  %}

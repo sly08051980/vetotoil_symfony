@@ -3,8 +3,37 @@
 {% block title %}Page de contact{% endblock %}
 
 {% block body %}
-<h1>Contact</h1>
-<div>
-{{form(formulaire)}}
+
+
+<div class="container">
+    <div class="card custom-box-shadow p-3 mb-5 bg-body rounded">
+        <div class="row">
+            <div class="col-12 justify-content-center">
+                <h2 class="text-center">Contact</h2>
+            </div>
+        </div>
+    </div>
+    {{ form_errors(form) }}
+    {{ form_start(form) }}
+    <div class="row justify-content-center">
+        <div class="col-lg-5">
+            <div class="card custom-box-shadow p-3 mb-5 bg-body rounded">
+                {{ form_row(form.sujet, {'label_attr': {'class': 'label-large'}}) }}
+                {{ form_row(form.email, {'label_attr': {'class': 'label-large'}}) }}
+                {{ form_row(form.nom, {'label_attr': {'class': 'label-large'}}) }}
+                {{ form_row(form.prenom, {'label_attr': {'class': 'label-large'}}) }}
+                {{ form_row(form.telephone, {'label_attr': {'class': 'label-large'}}) }}
+            </div>
+        </div>
+        <div class="col-lg-7 card custom-box-shadow bg-body rounded">
+        {{ form_row(form.message, {
+    'attr': {'class': 'form-control w-100', 'style': 'width: 100%;'},
+    'label_attr': {'class': 'label-large'}
+}) }}
+
+            {{ form_row(form.submit, {'label_attr': {'class': 'label-large'}}) }}
+        </div>
+    </div>
+    {{ form_end(form) }}
 </div>
 {% endblock %}

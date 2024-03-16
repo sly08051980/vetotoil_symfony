@@ -32,6 +32,10 @@ class RdvType extends AbstractType
                 'class' => Animal::class,
                 'choice_label' => 'id',
             ])
+            ->add('animal', EntityType::class, [
+                'class' => Animal::class,
+                'choice_label' => 'prenom_animal',
+            ])
             ->add('employer', EntityType::class, [
                 'class' => Employer::class,
                 'choice_label' => 'id',

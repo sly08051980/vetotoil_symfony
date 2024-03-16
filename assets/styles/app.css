@@ -1,6 +1,6 @@
 body {
-    /* background-color: #FEFEE2; */
-    background-color: black;
+    background-color: #FEFEE2;
+    /* background-color: black; */
 }
 .navbar,.footer {
     background: linear-gradient(white, purple);

@@ -13,13 +13,17 @@
                 <div class="col-md-4 mb-4">
                     <div class="card">
                         <div class="card-header">
-                            Employé ID : {{ employeId }}
+                            {# Employé ID : {{ employeId }} #}
+                            <p class="card-text">societe {{ disponibilite[4] }}</p>
+                            <p class="card-text">adresse {{ disponibilite[5] }}</p>
+                            <p class="card-text">Nom {{ disponibilite[2] }}</p>
+                            <p class="card-text">Prenom {{ disponibilite[3] }}</p>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">Disponibilité</h5>
                             <p class="card-text">Jour: {{ disponibilite[0] }}</p>
                             <p class="card-text">Heure: {{ disponibilite[1] }}h00</p>
-                          <p class="card-text">{{ edit.id }}</p>
+                          <p class="card-text">{{ patient.id }}</p>
                             <form method="POST" action="">
                                                        
    <input type="hidden" class="inputsansbordure w-100" value="{{ disponibilite[0] }}">
