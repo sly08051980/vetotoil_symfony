@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trouver un RDV{% endblock %}
+
+{% block body %}
+<h2>Disponibilités pour prendre rendez-vous</h2>
+
+{% if disponibilites is defined and disponibilites|length > 0 %}
+    <div class="disponibilites">
+        {% for employeId, dispo in disponibilites %}
+            <div class="disponibilite">
+                <h3>Disponibilités pour l'employé {{ employeId }}</h3>
+                <p>Date: {{ dispo.date }}</p>
+                <p>Heure: {{ dispo.heure }}:00</p>
+                {# <a href="{{ path('app_rdv_reserver', {'employeId': dispo.employeId, 'date': dispo.date, 'heure': dispo.heure}) }}" class="btn btn-primary">Réserver</a> #}
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>Aucune disponibilité n'a été trouvée.</p>
+{% endif %}
+{% endblock %}

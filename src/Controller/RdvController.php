@@ -8,42 +8,42 @@ use App\Entity\Commune;
 use App\Entity\Employer;
 use App\Entity\Patient;
 use App\Entity\Rdv;
-
 use App\Entity\Societe;
 use App\Entity\User;
 use App\Form\RdvType;
 use DateTime;
 use Doctrine\ORM\EntityManagerInterface;
+use RdvUniqueType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\SecurityBundle\Security;
 
 class RdvController extends AbstractController
 {
-    private $security;
+    private Security $security;
 
     public function __construct(Security $security)
     {
         $this->security = $security;
     }
-    #[Route('/rdv', name: 'app_rdv')]
-    public function index(Request $request, EntityManagerInterface $entityManager, Security $security): Response
-    {
-        $employes = $entityManager->getRepository(Employer::class)->findAll();
-        $disponibilites = [];
-        $nom = "";
-        $prenom = "";
 
+    #[Route('/rdv', name: 'app_rdv')]
+    public function index(Request $request, EntityManagerInterface $entityManager): Response
+    {
         $user = $this->security->getUser();
         $userId = $user->getId();
         $patient = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);
-        $animal = $entityManager->getRepository(Animal::class)->findBy(['user' => $user]);
-        $form = $this->createForm(RdvType::class);
-        $form->handleRequest($request);
+        $codePostalPatient = $patient->getCodePostalPatient();
+        $communePatient = $entityManager->getRepository(Commune::class)->findOneBy(['code_postal_commune' => $codePostalPatient]);
+        $animaux = $entityManager->getRepository(Animal::class)->findBy(['user' => $user]);
 
 
+       
+       
+
+        $disponibilites = [];
         $joursCorrespondance = [
             'lundi' => 'monday',
             'mardi' => 'tuesday',
@@ -53,132 +53,157 @@ class RdvController extends AbstractController
             'samedi' => 'saturday',
             'dimanche' => 'sunday',
         ];
-        $codePostalPatient = $patient->getCodePostalPatient();
-
-        $communePatient = $entityManager->getRepository(Commune::class)->findOneBy(['code_postal_commune' => $codePostalPatient]);
 
         if ($communePatient) {
             $latitudePatient = $communePatient->getLatitude();
             $longitudePatient = $communePatient->getLongitude();
-            $communes = $this->findCommunesWithinRadius($latitudePatient, $longitudePatient, 10, $entityManager);
+            $communesProches = $this->findCommunesWithinRadius($latitudePatient, $longitudePatient, 10, $entityManager);
 
+            $codesPostauxProches = array_map(function ($commune) {
+                return $commune['code_postal_commune'];
+            }, $communesProches);
 
-            foreach ($employes as $employe) {
-                if ($employe->getProfessionEmployer() !== 'Vétérinaire') {
-                    continue;
-                }
-                $codesPostaux = array_map(function ($commune) {
-                    return $commune['code_postal_commune'];
-                }, $communes);
+            $societesProches = $entityManager->getRepository(Societe::class)->findBy(['code_postal_societe' => $codesPostauxProches]);
+            $employesFiltres = [];
 
-                $ajouterRechercheCommunes = $entityManager->getRepository(Societe::class)->findBy(['code_postal_societe' => $codesPostaux]);
-
-                $ajouterTrie = [];
-                foreach ($ajouterRechercheCommunes as $societe) {
-                 
-                    // Obtenir les employés pour chaque société trouvée
-                    $employesDeLaSociete = $entityManager->getRepository(Ajouter::class)->findBy(['societe' => $societe]);
-
-                    foreach ($employesDeLaSociete as $ajout) {
-                        if ((null === $ajout->getDateSortieEmployer() || new \DateTime() < $ajout->getDateSortieEmployer())) {
-                            // Ajouter à la liste des employés à considérer
-                            // Assurez-vous de ne pas ajouter de doublons si un employé travaille pour plusieurs sociétés
-                            if (!in_array($ajout, $ajouterTrie)) {
-                                $ajouterTrie[] = $ajout;
-                            }
-                        }
-                       
+            foreach ($societesProches as $societe) {
+                $ajoutsSociete = $entityManager->getRepository(Ajouter::class)->findBy(['societe' => $societe]);
+                foreach ($ajoutsSociete as $ajout) {
+                    $employe = $ajout->getEmployer();
+                    if ((null === $ajout->getDateSortieEmployer() || new DateTime() < $ajout->getDateSortieEmployer()) && $ajout->getEmployer()->getProfessionEmployer() === 'Vétérinaire') {
+                        $employesFiltres[(string) $employe->getId()] = $employe;
                     }
-
-                    
                 }
-
-
-                
-                $joursTravail = [];
-
-                for ($i = 1; $i <= 31; $i++) {
-
+            }
+          
+            foreach ($employesFiltres as $employeId => $employe) {
+                $trouve = false; // Variable pour suivre si une disponibilité a été trouvée pour cet employé
+                $societesInfo = [];
+                $ajoutsEmploye = $entityManager->getRepository(Ajouter::class)->findBy(['employer' => $employe]);
+                foreach ($ajoutsEmploye as $ajout) {
+                    $societe = $ajout->getSociete();
+                    if ($societe) {
+                        $societesInfo[] = [
+                            'nomSociete' => $societe->getNomSociete(),
+                            'adresseSociete' => $societe->getAdresseSociete(),
+                            'codePostalSociete' => $societe->getCodePostalSociete(),
+                            'idSociete'=>$societe->getId(),
+                        ];
+                    }
+                }
+                for ($i = 1; $i <= 31 && !$trouve; $i++) { // Ajouter la condition !$trouve pour arrêter la boucle une fois une disponibilité trouvée
                     $date = (new DateTime())->modify("+$i day");
                     $jourActuelEnFrancais = array_search(strtolower($date->format('l')), array_map('strtolower', $joursCorrespondance), true);
-
-                    foreach ($ajouterTrie as $ajouts) {
-                       
-                        $societe = $ajouts->getSociete();
-                        // $nomSociete = $societe->getNomSociete();
-                        // $adresseSociete = $societe->getAdresseSociete();
-                        // $codePostalSociete = $societe->getCodePostalSociete();
-
-
-                        if (in_array($jourActuelEnFrancais, array_map('strtolower', $ajouts->getJoursTravailler()))) {
-                            $joursTravail[] = $date->format('Y-m-d');
-                        }
-                    }
-                }
-
-                $joursTravail = array_unique($joursTravail);
-        
-                $horairesTravail = range(8, 17);
-
-                $rdvs = $employe->getRdvs()->toArray();
-                usort($rdvs, function ($a, $b) {
-                    return $a->getDateRdv() <=> $b->getDateRdv() ?: $a->getHeureRdv() <=> $b->getHeureRdv();
-                });
-
-                foreach ($joursTravail as $jour) {
-                   
-                    $trouve = false;
+            
+                    $rdvs = $employe->getRdvs()->filter(function ($rdv) use ($date) {
+                        return $rdv->getDateRdv()->format('Y-m-d') === $date->format('Y-m-d');
+                    });
+            
+                    $horairesOccupes = array_map(function ($rdv) {
+                        return (int)$rdv->getHeureRdv()->format('H');
+                    }, $rdvs->toArray());
+            
+                    $horairesTravail = range(8, 17);
                     foreach ($horairesTravail as $heure) {
-                        $creneauLibre = true;
-                        foreach ($rdvs as $rdv) {
-                            if ($rdv->getDateRdv()->format('Y-m-d') == $jour && (int)$rdv->getHeureRdv()->format('H') == $heure) {
-                                $creneauLibre = false;
-                                break;
-                            }
-                        }
-                        if ($creneauLibre) {
-
-
-                            $rechercherEmployer = $entityManager->getRepository(User::class)->find($employe->getUser());
-                            $nom = $rechercherEmployer->getNom();
-                            $prenom = $rechercherEmployer->getPrenom();
-
-                            $disponibilites[(string)$employe->getId()] = [
-                                $jour,
-                                $heure,
-                                $nom,
-                                $prenom,
-                                // $nomSociete,
-                                // $adresseSociete,
-                                // $codePostalSociete
+                        if (!in_array($heure, $horairesOccupes)) {
+                            $disponibilites[$employeId] = [ // Utilisez l'ID de l'employé comme clé pour assurer l'unicité
+                                'date' => $date->format('Y-m-d'),
+                                'heure' => $heure,
+                                'employeId' => $employeId,
+                                'nom' => $employe->getUser()->getNom(),
+                                'prenom' => $employe->getUser()->getPrenom(),
+                                'societes' => $societesInfo,
+                               
                             ];
-
-                            $trouve = true;
-                            break;
+                       
+                            $trouve = true; // Marquez qu'une disponibilité a été trouvée
+                            break; // Sortez de la boucle des heures dès qu'une disponibilité est trouvée
                         }
                     }
-                    if ($trouve) break;
                 }
             }
         }
-    
+        $form = $this->createForm(RdvUniqueType::class);
+        $form->handleRequest($request);
 
         return $this->render('rdv/findrdv.html.twig', [
             'controller_name' => 'RdvController',
             'disponibilites' => $disponibilites,
-            'employes' => $employes,
             'patient' => $patient,
-            'nom' => $nom,
-            'prenom' => $prenom,
+            'animaux'=>$animaux,
+            'userId'=>$userId,
             'form' => $form->createView(),
-
         ]);
     }
+    #[Route('/rdvtest/valid', name: 'app_rdv_valid')]
+    public function rdvValid(Request $request, EntityManagerInterface $entityManager)
+    {
+        if ($request->isMethod('POST')) {
+           
+            $societeEmployerRdv=$request->request->get('societeId');
+            $date = $request->request->get('date');
+            $heure = $request->request->get('heure');
+            $employeId = $request->request->get('employeId');
+            $userId = $request->request->get('userId');
+            $animalId = $request->request->get('animal');
+
+          
+            $patient = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);
+            $societe = $entityManager->getRepository(Societe::class)->find($societeEmployerRdv);
+            $animal = $entityManager->getRepository(Animal::class)->find($animalId);
+            $employer=$entityManager->getRepository(Employer::class)->find($employeId);
+            // Créer une nouvelle instance de Rdv
+            $rdv = new Rdv();
+            $rdv->setDateRdv(new \DateTime($date));
+            $rdv->setHeureRdv(new \DateTime($heure));
+            $rdv->setEmployer($employer);
+            
+            $rdv->setSociete($societe);
+            $rdv->setAnimal($animal);
+        
+            // Définir le patient pour le Rdv
+            $rdv->setPatient($patient);
+            $entityManager->persist($rdv);
+            $entityManager->flush();
+            $this->addFlash('info', 'Rendez vous bien pris');
+            return $this->redirectToRoute('app_home');
+        } else {
+            return new Response("Méthode non autorisée", Response::HTTP_METHOD_NOT_ALLOWED);
+        }
+    }
+
+
+#[Route ('/rdv/findpro',name:'app_rdv_find_pro') ]
+public function findPro(Request $request,EntityManagerInterface $entityManager):Response{
+    $disponibilites = [];
+if ($request->isMethod('POST')) {
+   
+
+    $employeId = $request->request->get('employeId');
+    $employer=$entityManager->getRepository(Employer::class)->find($employeId);
+    $rdvs = $entityManager->getRepository(Rdv::class)->findByEmployerBetweenDates($employer);
+dd($rdvs);
+
+
+             
+            
+        }
+    
+
+
+
+return $this->render('rdv/findrdvparemployer.html.twig', [
+    'controller_name' => 'RdvController',
+    'disponibilites'=>$disponibilites,
+
+    
+]);
+
+}
 
     public function findCommunesWithinRadius($latitude, $longitude, $radius = 10, EntityManagerInterface $entityManager)
     {
         $conn = $entityManager->getConnection();
-
         $sql = "
             SELECT id, nom_commune, code_postal_commune,
                    (6366 * acos(cos(radians(:lat)) * cos(radians(latitude)) * cos(radians(longitude) - radians(:lon)) + sin(radians(:lat)) * sin(radians(latitude)))) AS distance
@@ -186,7 +211,6 @@ class RdvController extends AbstractController
             HAVING distance < :distance
             ORDER BY distance
         ";
-
         $stmt = $conn->prepare($sql);
         $stmt->bindValue('lat', $latitude);
         $stmt->bindValue('lon', $longitude);

@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Employer;
 use App\Entity\Rdv;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +47,19 @@ class RdvRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByEmployerBetweenDates(Employer $employer): array
+    {
+        $startDay = (new \DateTime())->modify('+1 day'); // Début de J+1
+        $endDay = (new \DateTime())->modify('+31 days'); // Fin de J+31
+
+        return $this->createQueryBuilder('r')
+            ->where('r.employer = :employer')
+            ->andWhere('r.date_rdv BETWEEN :startDay AND :endDay')
+            ->setParameter('employer', $employer)
+            ->setParameter('startDay', $startDay)
+            ->setParameter('endDay', $endDay)
+            ->getQuery()
+            ->getResult();
+    }
 }
