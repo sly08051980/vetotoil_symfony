@@ -1,42 +1,41 @@
 console.log("password chargé");
 document.addEventListener("DOMContentLoaded", function () {
-
     let verification =document.getElementById("registration_form_submit");
     
     verification.addEventListener("click", function(event){
-        let mdp=document.getElementById("registration_form_plainPassword_first").value;
-        let remdp =document.getElementById("registration_form_plainPassword_second").value;
+        let mdp = document.getElementById("registration_form_plainPassword_first").value;
+        let remdp = document.getElementById("registration_form_plainPassword_second").value;
+        let errors = []; 
+        
         if (mdp !== remdp) {
-    
-            alert ('mot de passe différent');
-            event.preventDefault();
-            return;
+            errors.push('Les mots de passe saisis sont différents.');
         }
     
-        if(mdp.length<8){
-            alert('Il faut au minimum 8 caractère');
-            event.preventDefault();
-            return;
+        if (mdp.length < 8) {
+            errors.push('Le mot de passe doit contenir au moins 8 caractères.');
         }
-        if (!mdp.match(/[A-Z]/, 'g')){
-            alert('il faut une majuscule');
-            event.preventDefault();
-            return;
+    
+        if (!mdp.match(/[A-Z]/)) {
+            errors.push('Le mot de passe doit contenir au moins une majuscule.');
         }
+    
         let expression = /\d/;
         if (!expression.test(mdp)) {
-           alert ('vous devez mettre des chiffres');
-           event.preventDefault();
-           return;
+            errors.push('Le mot de passe doit contenir au moins un chiffre.');
         }
     
-        let special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/; 
+        let special = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/;
         if (!special.test(mdp)){
-            alert("Il faut mettre un caractère spécial dans le mot de passe.");
+            errors.push('Le mot de passe doit contenir au moins un caractère spécial.');
+        }
+        
+      
+        if (errors.length > 0) {
+            alert(errors.join('\n'));
             event.preventDefault();
             return;
         }
-    })
+    });
       
     let mdp = document.getElementById("registration_form_plainPassword_first");
     let chiffre = document.getElementById("chiffre");
