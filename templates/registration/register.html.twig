@@ -11,8 +11,8 @@
 			<div class="card custom-box-shadow">
 				<div class="col-12 justify-content-center py-5">
 					<h1 class="text-center">Inscription</h1>
-			
-					
+
+
 				</div>
 			</div>
 		</div>
@@ -26,6 +26,45 @@
 					{{ form_row(registrationForm.email,{'label_attr': {'class': 'label-large'}}) }}
 					{{ form_row(registrationForm.plainPassword.first, { 'label_attr': {'class': 'label-large'}}) }}
 					{{ form_row(registrationForm.plainPassword.second, { 'label_attr': {'class': 'label-large'}}) }}
+					<ul id="ulVisible" class="d-none">
+						<div class="row">
+							<div class="col-4">
+								<img src="{{ asset('img/valider.png') }}" class="img-thumbnail d-none" id="chiffre" width="25%">
+
+							</div>
+							<div class="col-8">
+								<li class="text-font">Mettre des lettres et de chiffres</li>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">
+								<img src="{{ asset('img/valider.png') }}"  class="img-thumbnail d-none" id="majuscule" width="25%">
+
+							</div>
+							<div class="col-8">
+								<li class="text-font">Une ou plusieurs Majuscule</li>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">
+								<img src="{{ asset('img/valider.png') }}"  class="img-thumbnail d-none" id="caractere" width="25%">
+
+							</div>
+							<div class="col-8">
+								<li class="text-font">8 Caractères minimum</li>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-4">
+								<img src="{{ asset('img/valider.png') }}"  class="img-thumbnail d-none" id="special" width="25%">
+
+							</div>
+							<div class="col-8">
+								<li class="text-font">1 Caractere special</li>
+							</div>
+						</div>
+
+					</ul>
 					{{ form_row(registrationForm.agreeTerms,{'label_attr': {'class': 'label-large'}}) }}
 
 				</div>
@@ -36,4 +75,8 @@
 		{{ form_end(registrationForm) }}
 
 	</div>
+		{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/password.js') }}" type="module" defer></script>
+{% endblock %}
 {% endblock %}
