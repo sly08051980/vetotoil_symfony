@@ -23,17 +23,21 @@ class SocieteType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('siret', TelType::class, [
-                'label' => 'Siret',
-                'constraints' => [
-                    new Length(['min' => 14, 'max' => 14]),
-                    new Regex([
-                        'pattern' => '/^\d{14}$/',
-                        'message' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
-                    ]),
-                ],
-                'attr' => ['class' => 'form-control']
-                ])
+        ->add('siret', TelType::class, [
+            'label' => 'Siret',
+            'constraints' => [
+                new Length(['min' => 14, 'max' => 14]),
+                new Regex([
+                    'pattern' => '/^\d{14}$/',
+                    'message' => 'Le numéro SIRET doit contenir exactement 14 chiffres.',
+                ]),
+            ],
+            'attr' => [
+                'class' => 'form-control',
+                'maxlength' => 14, 
+                'pattern' => '\\d{14}', 
+            ]
+        ])
             ->add('nom_societe', TextType::class, [
                 'label' => 'Nom de la Société',
                 'required' => false,
