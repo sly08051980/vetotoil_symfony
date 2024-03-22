@@ -1,48 +1,57 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Trouver un Rendez-vous{% endblock %}
+{% block title %}Trouver un Rendez-vous
+{% endblock %}
 
 {% block body %}
-<h1>Trouver un Rendez-vous</h1>
+	<h1>Trouver un Rendez-vous</h1>
 
-{% if disponibilites|length > 0 %}
-    <div class="container">
-        <div class="row">
-            {% for dispo in disponibilites %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-header">
-                            Disponibilité : {{ dispo.date }} à {{ dispo.heure }}h
-                        </div>
-                        <div class="card-body">
-                            <h5 class="card-title">{{ dispo.nom }} {{ dispo.prenom }}</h5>
-                            {% for societe in dispo.societes %}
-                                <p class="card-text">
-                                    Société: {{ societe.nomSociete }}<br>
-                                    Adresse: {{ societe.adresseSociete }}, {{ societe.codePostalSociete }}
-                                    id: {{societe.idSociete}}
-                                </p>
-                      
-                            <label for="animal-select-{{ loop.index }}">Choisissez un animal :</label>
-                            <select id="animal-select-{{ loop.index }}" name="animal">
-                                <option value="">--Veuillez choisir un animal--</option>
-                                {% for animal in animaux %}
-                                    <option value="{{ animal.id }}">{{ animal.prenomAnimal }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                </div>
+	{% if disponibilites|length > 0 %}
+		<div class="container">
+			<div class="row">
+				{% for dispo in disponibilites %}
+					<div class="col-md-4 mb-4">
+						<div class="card">
+							<div class="card-header">
+								Disponibilité :
+								{{ dispo.date }}
+								à
+								{{ dispo.heure }}h
+							</div>
+							<div class="card-body">
+								<h5 class="card-title">{{ dispo.nom }}
+									{{ dispo.prenom }}</h5>
+								{% for societe in dispo.societes %}
+									<p class="card-text">
+										Société:
+										{{ societe.nomSociete }}<br>
+										Adresse:
+										{{ societe.adresseSociete }},
+										{{ societe.codePostalSociete }}
+										id:
+										{{societe.idSociete}}
+									</p>
 
-<input type="text" value="{{societe.idSociete}}">
-<input type="text" value="{{dispo.employeId}}">
-<input type="text" value="{{userId}}">
-            {% endfor %}
-                  {% endfor %}
-        </div>
-    </div>
-{% else %}
-    <p>Aucune disponibilité trouvée pour les critères donnés.</p>
-{% endif %}
+									<label for="animal-select-{{ loop.index }}">Choisissez un animal :</label>
+									<select id="animal-select-{{ loop.index }}" name="animal">
+										<option value="">--Veuillez choisir un animal--</option>
+										{% for animal in animaux %}
+											<option value="{{ animal.id }}">{{ animal.prenomAnimal }}</option>
+										{% endfor %}
+									</select>
+								</div>
+							</div>
+						</div>
+
+						<input type="text" value="{{societe.idSociete}}">
+						<input type="text" value="{{dispo.employeId}}">
+						<input type="text" value="{{userId}}">
+					{% endfor %}
+				{% endfor %}
+			</div>
+		</div>
+	{% else %}
+		<p>Aucune disponibilité trouvée pour les critères donnés.</p>
+	{% endif %}
 
 {% endblock %}
