@@ -38,6 +38,7 @@ security:
          - { path: ^/patient, roles: ROLE_PATIENT }
          - { path: ^/societe, roles: ROLE_SOCIETE }
          - { path: ^/employer, roles: ROLE_EMPLOYER }
+         - { path: ^/administrateur, roles: ROLE_ADMINISTRATEUR }
 
 when@test:
     security:

@@ -1,8 +1,9 @@
+
 <div class="pb-5">
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
 		<div class="container-fluid">
 			<div class="d-flex align-items-center">
-				<img src="{{ asset('img/logo.png') }}" alt="logo-vetotoil" height="30px" width="30px" class="me-3">
+				<img src="/images/img/logo.png" alt="logo-vetotoil" height="30" width="30" class="me-3">
 				<a class="navbar-brand" href="#">VETOTOIL</a>
 			</div>
 
@@ -41,10 +42,11 @@
 										<a class="dropdown-item" href="?controller=rdv&action=voir_rdv">Voir mes rdv</a>
 									</li>
 									<li>
-										<a class="dropdown-item" href="?controller=rdv&action=recherche_rdv&profession=Toiletteur">Rechercher Toiletteur</a>
+										<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Toiletteur'}) }}">Rechercher Toiletteur</a>
+
 									</li>
 									<li>
-										<a class="dropdown-item" href="?controller=rdv&action=recherche_rdv&profession=Vétérinaire">Rechercher Vétérinaire</a>
+										<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Vétérinaire'}) }}">Rechercher Vétérinaire</a>
 									</li>
 									<li><hr class="dropdown-divider"></li>
 									<li>
@@ -168,16 +170,16 @@
 									</a>
 								</li>
 								<li class="nav-item">
-									<a href="{{ path('app_logout') }}"><img src="{{ asset('img/deconnexion1.png') }}" class="img-fluid" alt="vetotoil connexion"></a>
+									<a href="{{ path('app_logout') }}"><img src="/images/img/deconnexion1.png" class="img-fluid" alt="vetotoil deconnexion"></a>
 								</li>
 							{% else %}
 								<li class="nav-item">
-									<a href="{{ path('app_login') }}"><img src="{{ asset('img/connexion1.png') }}" class="img-fluid" alt="vetotoil connexion"></a>
+									<a href="{{ path('app_login') }}"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
 								</li>
 							{% endif %}
 						{% else %}
 							<li class="nav-item">
-								<a href="{{ path('app_login') }}"><img src="{{ asset('img/connexion1.png') }}" class="img-fluid" alt="vetotoil connexion"></a>
+								<a href="{{ path('app_login') }}"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
 							</li>
 						{% endif %}
 					</li>

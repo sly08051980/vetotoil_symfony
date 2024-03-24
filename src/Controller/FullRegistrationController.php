@@ -29,7 +29,8 @@ class FullRegistrationController extends AbstractController
         $this->security = $security;
     }
     #[Route('/full/registration', name: 'app_full_registration')]
-    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository, EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository,
+     EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $user = $security->getUser();
         
@@ -43,10 +44,7 @@ class FullRegistrationController extends AbstractController
                     $this->addFlash('info', 'Votre compte est désactivé');
 
                     return $this->redirectToRoute('app_logout');
-                
-                }
-
-              
+                } 
             } else {
                 $user = new Patient();
                 $user->setDateCreationPatient(new \DateTime());

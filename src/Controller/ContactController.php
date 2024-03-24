@@ -24,6 +24,7 @@ class ContactController extends AbstractController
             $mail = new PHPMailer(true);
             $secretKeyGoogle = $_ENV['SECRET_KEY_GOOGLE'];
             $secretEmailGoogle = $_ENV['SECRET_EMAIL_GOOGLE'];
+            $secretEmailSend=$_ENV['SECRET_EMAIL_SEND'];
 
             try {
                 
@@ -37,11 +38,12 @@ class ContactController extends AbstractController
 
                 
                 $mail->setFrom($secretEmailGoogle);
-                $mail->addAddress('regnier.sylvain@yahoo.fr');
+                $mail->addAddress($secretEmailSend);
 
                 $mail->isHTML(true);
                 $mail->Subject = $formData['sujet']; 
-                $mail->Body    = 'Email: ' . $formData['email'] . '<br>Nom: ' . $formData['nom'] . '<br>Prénom: ' . $formData['prenom'] . '<br>Téléphone: ' . $formData['telephone'] . '<br>Message: ' . $formData['message'];
+                $mail->Body    = 'Email: ' . $formData['email'] . '<br>Nom: ' . $formData['nom'] . '<br>Prénom: ' . $formData['prenom'] . 
+                '<br>Téléphone: ' . $formData['telephone'] . '<br>Message: ' . $formData['message'];
                 $mail->AltBody = strip_tags($mail->Body);
 
                 $mail->send();
@@ -50,7 +52,7 @@ class ContactController extends AbstractController
                 $this->addFlash('info', 'Votre message a été envoyé.');
 return $this->redirectToRoute('app_home');
             } catch (Exception $e) {
-                $this->addFlash('error', "Message could not be sent. Mailer Error: {$mail->ErrorInfo}");
+                $this->addFlash('error', "Le message n'a pas été envoyé : {$mail->ErrorInfo}");
             }
         }
 

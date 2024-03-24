@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trouver un Rendez-vous{% endblock %}
+
+{% block body %}
+<h1>Trouver un Rendez-vous</h1>
+
+{% if societeInfo %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <h2 class="card-title">Informations de la Société</h2>
+            <p>Nom de la société : {{ societeInfo.nomSociete }}</p>
+            <p>Adresse de la société : {{ societeInfo.adresseSociete }}</p>
+            <p>Code postal de la société : {{ societeInfo.codePostalSociete }}</p>
+        </div>
+    </div>
+{% endif %}
+
+{% if creneauxDisponibles|length > 0 %}
+    <div class="container">
+        <div class="row"> <!-- Déplacer la div 'row' pour englober toutes les 'col-lg-3' -->
+            {% for date, heures in creneauxDisponibles %}
+                <div class="col-12 col-lg-3"> <!-- Chaque journée est une colonne dans la rangée -->
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            {{ date|date('l d F Y', 'Europe/Paris') }}
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-unstyled">
+                                {% for heure in heures %}
+                                    <li class="mb-2">
+                                        <span>{{ heure }}</span>
+                                        <!-- Formulaire de réservation pour chaque heure -->
+                                        <form method="POST" action="{{ path('app_rdv_valid') }}" class="d-inline-flex align-items-center">
+                                            <input type="hidden" name="date" value="{{ date }}">
+                                            <input type="hidden" name="heure" value="{{ heure|split(' ')[0] }}">
+                                            <input type="hidden" name="userId" value="{{ userId }}">
+                                            <input type="hidden" name="employeId" value="{{ employeId }}">
+                                            <input type="hidden" name="societeId" value="{{ societeInfo.idSociete }}">
+                                            
+                                            <select id="animal-select-{{ loop.index }}" name="animal" class="form-select form-select-sm me-2">
+                                                <option value="">--Veuillez choisir un animal--</option>
+                                                {% for animal in animaux %}
+                                                    <option value="{{ animal.id }}">{{ animal.prenomAnimal }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            
+                                            <button type="submit" class="btn btn-primary btn-sm">Réserver</button>
+                                        </form>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <p>Aucune disponibilité trouvée pour les critères donnés.</p>
+{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    ul.list-unstyled {
+        padding-left: 0;
+    }
+    .form-select-sm, .btn-sm {
+        padding: .25rem .5rem;
+        font-size: .875rem;
+    }
+</style>
+{% endblock %}

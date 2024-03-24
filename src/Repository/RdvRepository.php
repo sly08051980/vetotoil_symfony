@@ -2,8 +2,10 @@
 
 namespace App\Repository;
 
+use App\Entity\Employer;
 use App\Entity\Rdv;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -45,4 +47,20 @@ class RdvRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    // public function findRdvsForEmployer(Employer $employer)
+    // {
+    //     $qb = $this->createQueryBuilder('r')
+    //         ->where('r.employer = :employer')
+    //         ->setParameter('employer', $employer)
+    //         ->orderBy('r.date_rdv', 'ASC');
+    
+    //     return $qb->getQuery()->getResult();
+    // }
+
+    // src/Repository/RdvRepository.php
+
+
+
+
 }

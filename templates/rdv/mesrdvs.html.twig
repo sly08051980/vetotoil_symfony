@@ -1,0 +1,14 @@
+<h2>Rendez-vous à venir</h2>
+{% for rdv in rdvsFutur %}
+   <p>{{ rdv.dateRdv|date('Y-m-d') }} - {{ rdv.heureRdv|date('H:i') }} - {{ rdv.societe.nomSociete }}</p>
+
+{% else %}
+    <p>Aucun rendez-vous à venir.</p>
+{% endfor %}
+
+<h2>Rendez-vous passés</h2>
+{% for rdv in rdvsPasser %}
+    <p>{{ rdv.dateRdv|date('Y-m-d H:i') }} - {{ rdv.societe.nomSociete }}</p>
+{% else %}
+    <p>Aucun rendez-vous passé.</p>
+{% endfor %}
