@@ -1,20 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello RdvEmployerController!{% endblock %}
+{% block title %}Créneaux RDV{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<h2>Créneaux de Rendez-vous pour les 7 prochains jours</h2>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+<div class="creneaux">
+    {% for date, heures in creneauxDisponible %}
+        <h3>{{ date }}</h3>
+        <div class="jour">
+           {% for heure, info in heures %}
+    <div class="creneau">
+        <strong>{{ heure }}</strong> :
+        {% if info is iterable %}
+            {# <div>
+                <p>Status: {{ info['status'] }}</p>
+                <p>ID Patient: {{ info['infoPatient'][0] }}</p>
+                <p>Téléphone: {{ info['infoPatient'][1] }}</p>
+                <p>Email: {{ info['infoPatient'][2] }}</p>
+                <p>Nom: {{ info['infoPatient'][3] }}</p>
+                <p>Prénom: {{ info['infoPatient'][4] }}</p>
+                
+                <p>Race: {{ info['infoPatient'][6] }}</p>
+                <p>Type: {{ info['infoPatient'][7] }}</p>
+            </div> #}
+            <div>
+             <p>Prenom Animal: {{ info['infoPatient'][5] }}</p> 
+            </div>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail">
+  Détail
+</button>
+            <button type="button" class="btn btn-primary" >
+  Annuler le rdv 
+</button>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/xampp/htdocs/vetotoil_symfony/src/Controller/RdvEmployerController.php</code></li>
-        <li>Your template at <code>C:/xampp/htdocs/vetotoil_symfony/templates/rdv_employer/index.html.twig</code></li>
-    </ul>
+<!-- Modal -->
+<div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information pour {{ info['infoPatient'][3] }} {{ info['infoPatient'][4] }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div class="card">
+       <div class="card-header"
+       <p>Nom: {{ info['infoPatient'][3] }}</p>
+         <p>Prénom: {{ info['infoPatient'][4] }}</p>
+          <p>Téléphone: {{ info['infoPatient'][1] }}</p>
+          <div class="card-body">
+          <p>Prenom Animal: {{ info['infoPatient'][5] }}</p>
+             <p>Type: {{ info['infoPatient'][7] }}</p>
+           <p>Race: {{ info['infoPatient'][6] }}</p>
+
+       </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      </div>
+    </div>
+  </div>
 </div>
+        {% else %}
+            {{ info }} <!-- Affiche "Libre" si aucun RDV n'est pris pour ce créneau -->
+        {% endif %}
+    </div>
+{% endfor %}
+
+        </div>
+    {% endfor %}
+</div>
+
 {% endblock %}

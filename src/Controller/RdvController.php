@@ -215,11 +215,11 @@ class RdvController extends AbstractController
         $employeId = $request->query->get('employeId');
         $typePro = $request->query->get('typePro');
         if ($employeId) {
-            $employe = $entityManager->getRepository(Employer::class)->find($employeId);
+            $employer = $entityManager->getRepository(Employer::class)->find($employeId);
    
-            if ($employe && $employe->getProfessionEmployer() === $typePro) {
+            if ($employer && $employer->getProfessionEmployer() === $typePro) {
     
-                $ajouter = $entityManager->getRepository(Ajouter::class)->findOneBy(['employer' => $employe]);
+                $ajouter = $entityManager->getRepository(Ajouter::class)->findOneBy(['employer' => $employer]);
                 if ($ajouter && $ajouter->getSociete()) {
                     $societe = $ajouter->getSociete();
                     $societeInfo = [
@@ -243,7 +243,7 @@ class RdvController extends AbstractController
                     while ($dateDebut <= $dateFin) {
                         if (in_array((int)$dateDebut->format('w'), $joursTravailNumerique)) {
                             $dateTravail = $dateDebut->format('Y-m-d');
-                            $rdvs = $entityManager->getRepository(Rdv::class)->findBy(['date_rdv' => $dateDebut, 'employer' => $employe]);
+                            $rdvs = $entityManager->getRepository(Rdv::class)->findBy(['date_rdv' => $dateDebut, 'employer' => $employer]);
     
                             $rdvsParHeure = [];
                             foreach ($rdvs as $rdv) {
