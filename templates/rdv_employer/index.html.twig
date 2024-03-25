@@ -6,6 +6,7 @@
 <h2>Créneaux de Rendez-vous pour les 7 prochains jours</h2>
 
 <div class="creneaux">
+
     {% for date, heures in creneauxDisponible %}
         <h3>{{ date }}</h3>
         <div class="jour">
@@ -25,13 +26,17 @@
                 <p>Type: {{ info['infoPatient'][7] }}</p>
             </div> #}
             <div>
+            <p>Id rdv : {{ info['rdv'].id}}
              <p>Prenom Animal: {{ info['infoPatient'][5] }}</p> 
             </div>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detail">
   Détail
 </button>
-            <button type="button" class="btn btn-primary" >
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#annuler" >
   Annuler le rdv 
+</button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#valider" >
+  Valider le rdv 
 </button>
 
 <!-- Modal -->
@@ -44,7 +49,7 @@
       </div>
       <div class="modal-body">
        <div class="card">
-       <div class="card-header"
+       <div class="card-header">
        <p>Nom: {{ info['infoPatient'][3] }}</p>
          <p>Prénom: {{ info['infoPatient'][4] }}</p>
           <p>Téléphone: {{ info['infoPatient'][1] }}</p>
@@ -62,6 +67,58 @@
     </div>
   </div>
 </div>
+</div>
+
+
+<div class="modal fade" id="annuler" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information pour {{ info['infoPatient'][3] }} {{ info['infoPatient'][4] }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div class="card">
+       <div class="card-header">
+    <p>Souhaitez vous annuler le RDV pour le patient : </p>
+     <p>Nom: {{ info['infoPatient'][3] }}</p>
+         <p>Prénom: {{ info['infoPatient'][4] }}</p>
+        
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      <a href="{{ path('app_rdv_employer_annuler', {'id': info['rdv'].id, 'status': 'annuler'}) }}" class="btn btn-primary">Annuler le RDV</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+<div class="modal fade" id="valider" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Information pour {{ info['infoPatient'][3] }} {{ info['infoPatient'][4] }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+       <div class="card">
+       <div class="card-header">
+    <p>Souhaitez vous annuler le RDV pour le patient : </p>
+     <p>Nom: {{ info['infoPatient'][3] }}</p>
+         <p>Prénom: {{ info['infoPatient'][4] }}</p>
+        
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+      <a href="{{ path('app_rdv_employer_annuler', {'id': info['rdv'].id, 'status': 'valider'}) }}" class="btn btn-primary">Valider le rdv</a>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>
+
         {% else %}
             {{ info }} <!-- Affiche "Libre" si aucun RDV n'est pris pour ce créneau -->
         {% endif %}

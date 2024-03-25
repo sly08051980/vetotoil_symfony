@@ -6,9 +6,11 @@ use App\Entity\Ajouter;
 use App\Entity\Animal;
 use App\Entity\Employer;
 use App\Entity\Rdv;
+use App\Form\RdvType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -93,7 +95,7 @@ class RdvEmployerController extends AbstractController
                 }
                 $dateDebut->modify('+1 day');
             }
-
+// dd($creneauxDisponibles);
         }
 
 
@@ -101,5 +103,23 @@ class RdvEmployerController extends AbstractController
             'controller_name' => 'RdvEmployerController',
             'creneauxDisponible'=>$creneauxDisponibles,
         ]);
+    }
+ 
+    #[Route('/rdv/employer/{id}/edit/{status}', name: 'app_rdv_employer_annuler', methods: ['GET', 'POST'])]
+    public function editRdvEmployer(Request $request,Rdv $rdv,EntityManagerInterface $entityManager, string $status): Response
+    {
+        if ($status === 'annuler') {
+           
+            $rdv->setStatusRdv('annuler');
+            
+        }else if($status === 'valider'){
+            $rdv->setStatusRdv('valider');
+        }
+      
+$entityManager->flush();
+return $this->redirectToRoute('app_rdv_employer', [], Response::HTTP_SEE_OTHER);
+
+        
+    
     }
 }
