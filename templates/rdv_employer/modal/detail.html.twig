@@ -1,0 +1,36 @@
+	<div class="modal fade" id="detail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Information pour
+													{{ info['infoPatient'][3] }}
+													{{ info['infoPatient'][4] }}</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<div class="card">
+													<div class="card-header">
+														<p>Nom:
+															{{ info['infoPatient'][3] }}</p>
+														<p>Prénom:
+															{{ info['infoPatient'][4] }}</p>
+														<p>Téléphone:
+															{{ info['infoPatient'][1] }}</p>
+														<div class="card-body">
+															<p>Prenom Animal:
+																{{ info['infoPatient'][5] }}</p>
+															<p>Type:
+																{{ info['infoPatient'][7] }}</p>
+															<p>Race:
+																{{ info['infoPatient'][6] }}</p>
+
+														</div>
+													</div>
+												</div>
+												<div class="modal-footer">
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>

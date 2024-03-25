@@ -1,0 +1,35 @@
+	<div class="modal fade" id="valider" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+									<div class="modal-dialog">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Information pour
+													{{ info['infoPatient'][3] }}
+													{{ info['infoPatient'][4] }}</h5>
+												<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+											</div>
+											<div class="modal-body">
+												<div class="card">
+													<div class="card-header">
+														<p>Valider le RDV pour le patient :
+														</p>
+														<p>Nom:
+															{{ info['infoPatient'][3] }}</p>
+														<p>Prénom:
+															{{ info['infoPatient'][4] }}</p>
+
+													</div>
+												</div>
+												<div class="modal-footer">
+													<div class="modal-body">
+														{{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
+														{{ form_widget(form) }}
+														<button type="submit" class="btn btn-primary">Envoyer</button>
+														{{ form_end(form) }}
+													</div>
+													<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+													<a href="{{ path('app_rdv_employer_annuler', {'id': info['rdv'].id, 'status': 'valider'}) }}" class="btn btn-primary">Valider le rdv</a>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
