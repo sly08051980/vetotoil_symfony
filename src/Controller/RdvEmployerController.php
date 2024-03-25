@@ -6,7 +6,9 @@ use App\Entity\Ajouter;
 use App\Entity\Animal;
 use App\Entity\Employer;
 use App\Entity\Rdv;
+use App\Entity\Soigner;
 use App\Form\RdvType;
+use App\Form\SoignerType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -23,9 +25,14 @@ class RdvEmployerController extends AbstractController
         $this->security = $security;
     }
     #[Route('/rdv/employer', name: 'app_rdv_employer')]
-    public function rdvEmployer(EntityManagerInterface $entityManager): Response
+    public function rdvEmployer(Request $request,EntityManagerInterface $entityManager): Response
     {
-
+      $societe=null;
+    
+     $animal=null;
+     $patient=null;
+      $employer=null;
+      $dates=null;
         $user = $this->security->getUser();
         $employer = $entityManager->getRepository(Employer::class)->findOneBy(['user' => $user]);
         $employerId = $employer->getId();
@@ -69,6 +76,8 @@ class RdvEmployerController extends AbstractController
                             $animalPatient = $animal->getPrenomAnimal();
                             $race = $animal->getRace();
                             $type = $race->getType();
+                            $societe=$rdv->getSociete();
+                           
 
                             $infoPatient = [
                                 $patient->getId(),
@@ -79,6 +88,9 @@ class RdvEmployerController extends AbstractController
                                 $animalPatient,
                                 $race->getRaceAnimal(),
                                 $type->getTypeAnimal(),
+                               $societe->getId(),
+                                $employerId,
+                                $animal->getId(),
                             ];
                             //fin de recupere les entity pour afficher les donnée
 
@@ -95,13 +107,33 @@ class RdvEmployerController extends AbstractController
                 }
                 $dateDebut->modify('+1 day');
             }
-// dd($creneauxDisponibles);
-        }
 
+        }
+    
+        $dates = new \DateTime();
+   
+
+        $soigner=new Soigner();
+        $soigner->setSociete($societe);
+      $soigner->setAnimal($animal);
+      $soigner->setPatient($patient);
+      $soigner->setEmployer($employer);
+      $soigner->setDateSoins($dates);
+        $form = $this->createForm(SoignerType::class,$soigner,[
+      
+        ]);
+        $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            $entityManager->persist($soigner);
+            $entityManager->flush();
+          
+        }
 
         return $this->render('rdv_employer/index.html.twig', [
             'controller_name' => 'RdvEmployerController',
             'creneauxDisponible'=>$creneauxDisponibles,
+            'form'=>$form,
         ]);
     }
  

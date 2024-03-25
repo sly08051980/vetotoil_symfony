@@ -61,10 +61,14 @@ class Employer
     #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'employer')]
     private Collection $rdvs;
 
+    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'employer')]
+    private Collection $soigners;
+
     public function __construct()
     {
         $this->ajouters = new ArrayCollection();
         $this->rdvs = new ArrayCollection();
+        $this->soigners = new ArrayCollection();
     }
 
 
@@ -265,6 +269,36 @@ class Employer
             // set the owning side to null (unless already changed)
             if ($rdv->getEmployer() === $this) {
                 $rdv->setEmployer(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Soigner>
+     */
+    public function getSoigners(): Collection
+    {
+        return $this->soigners;
+    }
+
+    public function addSoigner(Soigner $soigner): static
+    {
+        if (!$this->soigners->contains($soigner)) {
+            $this->soigners->add($soigner);
+            $soigner->setEmployer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoigner(Soigner $soigner): static
+    {
+        if ($this->soigners->removeElement($soigner)) {
+            // set the owning side to null (unless already changed)
+            if ($soigner->getEmployer() === $this) {
+                $soigner->setEmployer(null);
             }
         }
 

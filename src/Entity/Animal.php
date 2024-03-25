@@ -51,9 +51,13 @@ class Animal
     #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'animal')]
     private Collection $rdvs;
 
+    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'animal')]
+    private Collection $soigners;
+
     public function __construct()
     {
         $this->rdvs = new ArrayCollection();
+        $this->soigners = new ArrayCollection();
     }
 
 
@@ -196,6 +200,36 @@ class Animal
             // set the owning side to null (unless already changed)
             if ($rdv->getAnimal() === $this) {
                 $rdv->setAnimal(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Soigner>
+     */
+    public function getSoigners(): Collection
+    {
+        return $this->soigners;
+    }
+
+    public function addSoigner(Soigner $soigner): static
+    {
+        if (!$this->soigners->contains($soigner)) {
+            $this->soigners->add($soigner);
+            $soigner->setAnimal($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoigner(Soigner $soigner): static
+    {
+        if ($this->soigners->removeElement($soigner)) {
+            // set the owning side to null (unless already changed)
+            if ($soigner->getAnimal() === $this) {
+                $soigner->setAnimal(null);
             }
         }
 

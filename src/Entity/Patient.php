@@ -56,6 +56,9 @@ class Patient
     #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'patient')]
     private Collection $rdvs;
 
+    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'patient')]
+    private Collection $soigners;
+
     // #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'patient')]
     // private Collection $animals;
 
@@ -63,6 +66,7 @@ class Patient
     {
         $this->animals = new ArrayCollection();
         $this->rdvs = new ArrayCollection();
+        $this->soigners = new ArrayCollection();
     }
 
 
@@ -258,6 +262,36 @@ class Patient
             // set the owning side to null (unless already changed)
             if ($rdv->getPatient() === $this) {
                 $rdv->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Soigner>
+     */
+    public function getSoigners(): Collection
+    {
+        return $this->soigners;
+    }
+
+    public function addSoigner(Soigner $soigner): static
+    {
+        if (!$this->soigners->contains($soigner)) {
+            $this->soigners->add($soigner);
+            $soigner->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoigner(Soigner $soigner): static
+    {
+        if ($this->soigners->removeElement($soigner)) {
+            // set the owning side to null (unless already changed)
+            if ($soigner->getPatient() === $this) {
+                $soigner->setPatient(null);
             }
         }
 
