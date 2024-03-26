@@ -82,7 +82,7 @@
 									<li>
 										<a class="dropdown-item" href="?controller=pro&action=gestion_employer">Gestion des employés</a>
 									</li>
-									<li>
+									<li id="test">
 										<a href="#" class="dropdown-item" id="registerEmployerLink">Inscrire un Employer</a>
 
 										<form id="registerEmployerForm" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="display: none;">
@@ -144,7 +144,7 @@
 								
 							</li>
 									<li class="nav-item">
-							<a href="#" class="nav-link active" aria-current="page">Mon Profil</a>
+							<a href="{{ path('app_edit_employer',{'id':app.user.id}) }}" class="nav-link active" aria-current="page">Mon Profil</a>
 						</li>
 						{% endif %}
 					{% endif %}

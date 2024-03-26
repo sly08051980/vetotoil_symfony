@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Profil{% endblock %}
+
+
+{% block body %}
+<div class="container pb-5 pt-5" id="inscription">
+		<div class="row pb-5 ">
+			<div class="card custom-box-shadow">
+				<div class="col-12 justify-content-center py-5">
+					<h1 class="text-center">Modifier Profil Employer</h1>
+				</div>
+			</div>
+		</div>
+       <div class="row justify-content-center">
+         <div class="col-lg-6 ">
+        <div class="card custom-box-shadow">
+       
+	{{ form_errors(form) }}
+	{{ form_start(form) }}
+
+	{{ form_end(form) }}
+    </div>
+    </div>
+    </div>
+    </div>
+{% endblock %}

@@ -28,9 +28,7 @@ class RdvEmployerController extends AbstractController
     public function rdvEmployer(Request $request,EntityManagerInterface $entityManager,$jours): Response
     {
 
-
-      $societe=null;
-    
+      $societe=null;    
      $animal=null;
      $patient=null;
       $employer=null;
@@ -41,7 +39,6 @@ class RdvEmployerController extends AbstractController
         if ($employerId) {
 
             $ajouter = $entityManager->getRepository(Ajouter::class)->findOneBy(['employer' => $employer]);
-
 
             $joursTravailArray = $ajouter->getJoursTravailler();
 
@@ -61,8 +58,6 @@ $jours="Vos rdv jusqu'a la fin du mois";
                 $jours="Vos rdv pour les 7 prochains jours";
             }
         
-
-
             while ($dateDebut <= $dateFin) {
                 if (in_array((int) $dateDebut->format('w'), $joursTravailNumerique)) {
                     $dateTravail = $dateDebut->format('Y-m-d');
@@ -124,7 +119,6 @@ $jours="Vos rdv jusqu'a la fin du mois";
         }
     
         $dates = new \DateTime();
-   
 
         $soigner=new Soigner();
         $soigner->setSociete($societe);
@@ -165,7 +159,5 @@ $jours="Vos rdv jusqu'a la fin du mois";
 $entityManager->flush();
 return $this->redirectToRoute('app_rdv_employer', [], Response::HTTP_SEE_OTHER);
 
-        
-    
     }
 }

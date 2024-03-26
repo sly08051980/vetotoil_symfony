@@ -1,11 +1,12 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello FullRegistrationController!{% endblock %}
+{% block title %}Hello FullRegistrationController!
+{% endblock %}
 
 {% block body %}
-{# {{ form(form) }} #}
-<div class="container pb-5 pt-5" id="inscription">
-<div class="row pb-5 ">
+	{# {{ form(form) }} #}
+	<div class="container pb-5 pt-5" id="inscription">
+		<div class="row pb-5 ">
 			<div class="card custom-box-shadow">
 				<div class="col-12 justify-content-center py-5">
 					<h1 class="text-center">Information sur la société</h1>
@@ -13,34 +14,34 @@
 			</div>
 		</div>
 
-{{ form_errors(form) }}
+		{{ form_errors(form) }}
 		{{ form_start(form) }}
-<div class="card custom-box-shadow">
+		<div class="card custom-box-shadow">
 			<div class="row justify-content-center">
 				<div class="col-lg-6">
-{{ form_row(form.siret,{'label_attr': {'class': 'label-large'}}) }}
-<button class="btn btn-custom rounded-pill" id="validerSiret">Rechercher</button>
-{{ form_row(form.nom_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.profession_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.adresse_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.complement_adresse_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.code_postal_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.ville_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.telephone_societe,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.telephone_dirigeant,{'label_attr': {'class': 'label-large'}}) }}
-{{ form_row(form.imageFile) }}
+					{{ form_row(form.siret,{'label_attr': {'class': 'label-large'}}) }}
+					<button class="btn btn-custom rounded-pill" id="validerSiret">Rechercher</button>
+					{{ form_row(form.nom_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.profession_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.adresse_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.complement_adresse_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.code_postal_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.ville_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.telephone_societe,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.telephone_dirigeant,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.imageFile) }}
 
-{{ form_row(form.submit,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.submit,{'label_attr': {'class': 'label-large'}}) }}
 
-	</div>
+				</div>
 
 
 			</div>
 		</div>
-	{{ form_end(form) }}
-        </div>
-		{% block javascripts %}
-    {{ parent() }}
-    <script src="{{ asset('js/siret.js') }}" type="module" defer></script>
-{% endblock %}
+		{{ form_end(form) }}
+	</div>
+	{% block javascripts %}
+		{{ parent() }}
+		 <script src="{{ asset('js/siret.js') }}" type="module" defer></script>
+	{% endblock %}
 {% endblock %}
