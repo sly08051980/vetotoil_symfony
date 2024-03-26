@@ -24,9 +24,11 @@ class RdvEmployerController extends AbstractController
     {
         $this->security = $security;
     }
-    #[Route('/rdv/employer', name: 'app_rdv_employer')]
-    public function rdvEmployer(Request $request,EntityManagerInterface $entityManager): Response
+    #[Route('/rdv/employer/{jours}', name: 'app_rdv_employer')]
+    public function rdvEmployer(Request $request,EntityManagerInterface $entityManager,$jours): Response
     {
+
+
       $societe=null;
     
      $animal=null;
@@ -47,9 +49,20 @@ class RdvEmployerController extends AbstractController
                 return ['dimanche' => 0, 'lundi' => 1, 'mardi' => 2, 'mercredi' => 3, 'jeudi' => 4, 'vendredi' => 5, 'samedi' => 6,][strtolower($jour)];
             }, $joursTravailArray);
 
-            $dateDebut = new \DateTime();
-            $dateFin = clone $dateDebut;
-            $dateFin->modify('+7 days');
+            if ($jours=="mois"){
+                $dateDebut = new \DateTime();
+                $dateFin = clone $dateDebut; 
+                $dateFin->modify('last day of this month');
+$jours="Vos rdv jusqu'a la fin du mois";
+            }else{
+                $dateDebut = new \DateTime();
+                $dateFin = clone $dateDebut;
+                $dateFin->modify('+'.$jours. 'days');
+                $jours="Vos rdv pour les 7 prochains jours";
+            }
+        
+
+
             while ($dateDebut <= $dateFin) {
                 if (in_array((int) $dateDebut->format('w'), $joursTravailNumerique)) {
                     $dateTravail = $dateDebut->format('Y-m-d');
@@ -133,6 +146,7 @@ class RdvEmployerController extends AbstractController
         return $this->render('rdv_employer/index.html.twig', [
             'controller_name' => 'RdvEmployerController',
             'creneauxDisponible'=>$creneauxDisponibles,
+            'jours'=>$jours,
             'form'=>$form,
         ]);
     }

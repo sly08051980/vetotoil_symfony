@@ -121,36 +121,31 @@
 								</ul>
 
 							</li>
+						
 						{% endif %}
 						{% if 'ROLE_EMPLOYER' in userRoles  %}
 						<li class="nav-item dropdown">
-								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employer</a>
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rdv</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
 									<li>
-										<a class="dropdown-item" href="?controller=pro&action=gestion_employer">Gestion des employés</a>
-									</li>
-									<li class="registerEmployer">
-										<a href="#" class="dropdown-item" id="registerEmployerLink">Inscrire un Employer</a>
+									<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 7}) }}">Rdv sur 7 jours</a>
 
-										<form id="registerEmployerForm" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="display: none;">
-											<input type="hidden" name="type" value="employer">
-										</form>
 									</li>
-									<li>
-										<a href="{{ path('employer_search') }}" class="dropdown-item">Ajouter Employer Par Email</a>
+									<li class="rdvMois">
+										<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 'mois'}) }}"  id="rdvMoisLink">Rdv sur le mois</a>
+
 									</li>
-									<li>
-										<a class="dropdown-item" href="?controller=pro&action=voir_tous_rdv_employer">Voir les RDV des employés</a>
-									</li>
-									<li>
-										<a class="dropdown-item" href="#">Recherche RDV Employé</a>
-									</li>
+
 									<li><hr class="dropdown-divider"></li>
 									<li>
 										<a class="dropdown-item" href="#">Something else here</a>
 									</li>
 								</ul>
+								
 							</li>
+									<li class="nav-item">
+							<a href="#" class="nav-link active" aria-current="page">Mon Profil</a>
+						</li>
 						{% endif %}
 					{% endif %}
 
