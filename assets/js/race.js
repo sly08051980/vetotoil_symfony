@@ -5,11 +5,11 @@ console.log("script chargé race");
 
 
 
-  let boutonAnimal = document.getElementById("boutonAnimal");
+  // let boutonAnimal = document.getElementById("boutonAnimal");
 
-  boutonAnimal.addEventListener("click", function () {
-    document.getElementById("displayAnimal").classList.toggle("invisible"); 
-  });
+  // boutonAnimal.addEventListener("click", function () {
+  //   document.getElementById("displayAnimal").classList.toggle("invisible"); 
+  // });
 
   const typeSelect = document.getElementById("animal_type");
   const raceSelect = document.getElementById("animal_race");
@@ -28,8 +28,7 @@ console.log("script chargé race");
         })
         .catch((error) => console.error("Error:", error));
     });
-  } else {
-    console.error("Element #animal_type not found");
+  
   }
 
 

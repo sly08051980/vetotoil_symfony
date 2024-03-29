@@ -35,27 +35,49 @@ class PatientType extends AbstractType
             ])
             ->add('code_postal_patient', TextType::class, [
                 'label' => 'Code Postal',
-                'attr' => ['class' => 'form-control']
+                'attr' => [
+                    'class' => 'form-control',
+                    'maxlength' => 5, 
+                    'pattern' => '\\d*', 
+                ],
+                'constraints' => [
+                    new Length([
+                        'max' => 5,
+                        'maxMessage' => 'Le code postal ne peut contenir plus de {{ limit }} chiffres.',
+                    ]),
+                    new Regex([
+                        'pattern' => '/^\d+$/',
+                        'message' => 'Le code postal doit être composé uniquement de chiffres.',
+                    ]),
+                ],
             ])
             ->add('ville_patient', TextType::class, [
                 'label' => 'Ville',
                 'attr' => ['class' => 'form-control']
             ])
-            ->add('telephone_patient', TelType::class, [
-                'label' => 'Numéro de téléphone',
+            ->add('telephone_patient', TextType::class, [
+                'label' => 'Téléphone Patient',
+                'attr' => [
+                    'class' => 'form-control',
+                    'maxlength' => 10, 
+                    'pattern' => '\\d*', 
+                ],
                 'constraints' => [
-                    new Length(['min' => 10, 'max' => 10]),
+                    new Length([
+                        'max' => 5,
+                        'maxMessage' => 'Le téléphone ne peut contenir plus de {{ limit }} chiffres.',
+                    ]),
                     new Regex([
-                        'pattern' => '/^\d{10}$/',
-                        'message' => 'Le numéro de téléphone doit contenir exactement 10 chiffres.',
+                        'pattern' => '/^\d+$/',
+                        'message' => 'Le téléphone doit être composé uniquement de chiffres.',
                     ]),
                 ],
-                'attr' => ['class' => 'form-control']
-                ])
+            ])
             ->add('date_creation_patient', DateType::class,[
+                'label' => false,
                 'attr' => [
                     'hidden' => true,
-                    'label' => false,
+                   
                 ]
               
             ]

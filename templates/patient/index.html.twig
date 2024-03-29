@@ -1,10 +1,55 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PatientController!{% endblock %}
+{% block title %}Modifier mon profil
+{% endblock %}
 
 {% block body %}
-    {{ form_errors(form) }}
-    {{ form_start(form, {'attr': {'data-turbo': 'false'}}) }}
-{{ form(form) }}
-{{ form_end(form) }}
+	<div class="container pb-5 pt-5" id="inscription">
+
+		<div class="row justify-content-center mb-5">
+			<div class="row pb-5 ">
+				<div class="card custom-box-shadow">
+					<div class="col-12 justify-content-center py-5">
+						<h1 class="text-center">Modifier mon profil</h1>
+
+
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-6">
+				<div class="card custom-box-shadow p-4">
+
+					{{ form_start(form, {'attr': {'class': 'g-3', 'data-turbo': 'false'}}) }}
+					<div class="mb-3">
+						{{ form_row(form.adresse_patient) }}
+					</div>
+					<div class="mb-3">
+						{{ form_row(form.complement_adresse_patient) }}
+					</div>
+					<div class="row">
+						<div class="col-md-6 mb-3">
+							{{ form_row(form.code_postal_patient) }}
+						</div>
+						<div class="col-md-6 mb-3">
+							{{ form_row(form.ville_patient) }}
+						</div>
+					</div>
+					<div class="mb-3">
+						{{ form_row(form.telephone_patient) }}
+					</div>
+					<div class="mb-3">
+						{{ form_row(form.imageFile, {
+                        'label': 'Photo (optionnel)',
+                        'label_attr': {'class': 'form-label mt-4'},
+                        'attr': {'class': 'form-control'}
+                    }) }}
+					</div>
+					<div class="text-center">
+						{{ form_row(form.submit, {'attr': {'class': 'btn btn-custom rounded-pill'}}) }}
+					</div>
+					{{ form_end(form) }}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}

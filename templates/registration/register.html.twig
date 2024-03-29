@@ -68,13 +68,17 @@
 						</div>
 
 					</ul>
-					{{ form_row(registrationForm.agreeTerms,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(registrationForm.agreeTerms,{'label': 'Cocher la case pour accepter tous les conditions générales '}) }}
 
 				</div>
 			</div>
-
+			<div class="row justify-content-center">
+			<div class="col-lg-4 mt-5 mb-5">
+{{ form_row(registrationForm.submit,{'label_attr': {'class': 'label-large'},'attr': {'class': 'btn btn-custom rounded-pill'}}) }}
+</div>
+</div>
 		</div>
-{{ form_row(registrationForm.submit,{'label_attr': {'class': 'label-large'}}) }}
+
 		{{ form_end(registrationForm) }}
 
 	</div>

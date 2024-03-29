@@ -78,8 +78,9 @@ class RegistrationFormType extends AbstractType
             ['label'=>'Valider'
             ])
             ->add('roles', ChoiceType::class, [
+                'label' => false,
                 'attr' => [
-                    'hidden' => true,
+                    'class' => 'd-none',
                 ],
                 'choices' => [
                     'Patient' => 'ROLE_PATIENT',

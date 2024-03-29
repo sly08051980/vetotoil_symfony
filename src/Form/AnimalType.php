@@ -34,8 +34,8 @@ class AnimalType extends AbstractType
             ->add('date_creation_animal', DateType::class, [
                 'widget' => 'single_text',
                 'required' => false,
-                // 'label' => false, 
-                // 'attr' => ['hidden' => true], 
+                'label' => false, 
+                'attr' => ['hidden' => true], 
             ])
             ->add('date_fin_animal', DateType::class, [
                 'widget' => 'single_text',
@@ -61,8 +61,9 @@ class AnimalType extends AbstractType
                 'class' => User::class,
 'choice_label' => 'id',
 // 'attr' => ['style' => 'display:none;'],
-'label' => 'id user',
+'label' => false,
 'data' => $user,
+'attr' => ['hidden' => true],
 
             ])
             ->add('imageFile',VichImageType::class,[

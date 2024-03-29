@@ -3,18 +3,26 @@
 {% block title %}Trouver un Rendez-vous{% endblock %}
 
 {% block body %}
-    <h1>Trouver un Rendez-vous</h1>
+<div class="container">
+ <div class="row justify-content-center mb-5 mt-5">
+        <div class="col-12">
+            <div class="card custom-box-shadow py-5">
+                <h1 class="text-center">Trouver un Rendez-vous</h1>
+            </div>
+        </div>
+    </div>
+    
 
     {% if disponibilites|length > 0 %}
-        <div class="container">
+        
             <div class="row">
                 {% for dispo in disponibilites %}
                     <div class="col-md-4 mb-4">
-                        <div class="card">
+                        <div class="card custom-box-shadow">
                             <div class="card-header">
                                 Disponibilité : {{ dispo.date }} à {{ dispo.heure }}h00
                             </div>
-                            <div class="card-body">
+                            <div class="card-body ">
                                 <h5 class="card-title">Professionel : {{ dispo.nom }} {{ dispo.prenom }}</h5>
                                 {% for societe in dispo.societes %}
                                     <p class="card-text">
