@@ -78,9 +78,9 @@ class RdvController extends AbstractController
             }
           
             foreach ($employesFiltres as $employeId => $employe) {
-                $trouve = false; // Variable pour suivre si une disponibilité a été trouvée pour cet employé
+                $trouve = false; 
             
-                // Récupérer les informations des sociétés pour cet employé
+               
                 $societesInfo = [];
                 $ajoutsEmploye = $entityManager->getRepository(Ajouter::class)->findBy(['employer' => $employe]);
                 foreach ($ajoutsEmploye as $ajout) {
@@ -95,8 +95,8 @@ class RdvController extends AbstractController
                     }
                 }
             
-                // Récupérer les jours de travail de l'employé
-                $joursTravailEmploye = []; // Tableau pour stocker les jours de travail
+        
+                $joursTravailEmploye = [];
                 foreach ($ajoutsEmploye as $ajout) {
                     if ($ajout->getJoursTravailler()) {
                         foreach ($ajout->getJoursTravailler() as $jour) {
@@ -109,7 +109,7 @@ class RdvController extends AbstractController
                     $date = (new DateTime())->modify("+$i day");
                     $jourDeLaSemaine = strtolower($date->format('l'));
             
-                    // Vérifier si le jour actuel est un jour de travail pour l'employé
+                  
                     if (in_array($jourDeLaSemaine, $joursTravailEmploye)) {
                         $rdvs = $employe->getRdvs()->filter(function ($rdv) use ($date) {
                             return $rdv->getDateRdv()->format('Y-m-d') === $date->format('Y-m-d');
@@ -130,8 +130,8 @@ class RdvController extends AbstractController
                                     'prenom' => $employe->getUser()->getPrenom(),
                                     'societes' => $societesInfo,
                                 ];
-                                $trouve = true; // Marquez qu'une disponibilité a été trouvée
-                                break; // Sortez de la boucle des heures dès qu'une disponibilité est trouvée
+                                $trouve = true; 
+                                break; 
                             }
                         }
                     }
@@ -168,7 +168,7 @@ class RdvController extends AbstractController
             $societe = $entityManager->getRepository(Societe::class)->find($societeEmployerRdv);
             $animal = $entityManager->getRepository(Animal::class)->find($animalId);
             $employer=$entityManager->getRepository(Employer::class)->find($employeId);
-            // Créer une nouvelle instance de Rdv
+           
             $rdv = new Rdv();
             $rdv->setDateRdv(new \DateTime($date));
             $rdv->setHeureRdv(new \DateTime($heure));
@@ -177,7 +177,7 @@ class RdvController extends AbstractController
             $rdv->setSociete($societe);
             $rdv->setAnimal($animal);
         
-            // Définir le patient pour le Rdv
+           
             $rdv->setPatient($patient);
             $entityManager->persist($rdv);
             $entityManager->flush();
@@ -230,16 +230,16 @@ class RdvController extends AbstractController
                     ];
                     $joursTravailArray = $ajouter->getJoursTravailler();
     
-                    $dateDebut = new \DateTime(); // Date de début (à ajuster selon le besoin)
+                    $dateDebut = new \DateTime(); 
                     $dateFin = clone $dateDebut;
-                    $dateFin->modify('+1 month'); // Ajoute un mois pour définir la date de fin
+                    $dateFin->modify('+1 month'); 
     
-                    // Conversion des jours de travail en leur équivalent numérique
+                   
                     $joursTravailNumerique = array_map(function ($jour) {
                         return ['dimanche' => 0, 'lundi' => 1, 'mardi' => 2, 'mercredi' => 3, 'jeudi' => 4, 'vendredi' => 5, 'samedi' => 6,][strtolower($jour)];
                     }, $joursTravailArray);
     
-                    // Parcours de l'intervalle jour par jour
+                 
                     while ($dateDebut <= $dateFin) {
                         if (in_array((int)$dateDebut->format('w'), $joursTravailNumerique)) {
                             $dateTravail = $dateDebut->format('Y-m-d');
@@ -299,7 +299,7 @@ class RdvController extends AbstractController
         return $this->render('rdv/mesrdvs.html.twig', [
             'rdvsFutur' => $rdvsFutur,
             'rdvsPasser' => $rdvsPasser,
-            // autres variables nécessaires
+           
         ]);
 
     }

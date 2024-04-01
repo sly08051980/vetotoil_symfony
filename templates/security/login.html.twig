@@ -31,7 +31,7 @@
 
         <input type="hidden" name="_csrf_token"
                value="{{ csrf_token('authenticate') }}" >
-
+<a href="#">Mot de passe oublié</a>
                <p class="mt-5"> Pas de compte inscrivez vous en cliquant <a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}">ici pour les particulier</a> ou <a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}">ici pour les professionnel</a></p>
 
         <button class="btn btn-custom rounded-pill mt-5 mb-5" type="submit">

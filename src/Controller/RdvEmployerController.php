@@ -70,14 +70,14 @@ $jours="Vos rdv jusqu'a la fin du mois";
 
 
                     foreach ($rdvs as $rdv) {
-                        $heureRdv = (int) $rdv->getHeureRdv()->format('H'); // Convertir en entier pour assurer la correspondance
+                        $heureRdv = (int) $rdv->getHeureRdv()->format('H'); 
 
-                        // Construire la clé pour le créneau horaire pris
+                        
                         $creneauKey = sprintf("%02d:00 - %02d:00", $heureRdv, $heureRdv + 1);
 
-                        // Vérifier si la clé existe bien pour éviter les erreurs
+                     
                         if (isset ($creneauxDisponibles[$dateTravail][$creneauKey])) {
-                            //recupere les entity pour afficher les donnée
+                           
                             $patient = $rdv->getPatient();
                             $userPatient = $patient->getUser();
                             $animal = $rdv->getAnimal();
@@ -100,11 +100,10 @@ $jours="Vos rdv jusqu'a la fin du mois";
                                 $employerId,
                                 $animal->getId(),
                             ];
-                            //fin de recupere les entity pour afficher les donnée
+                       
 
 
-                            // S'il existe, marquer comme pris avec des détails
-                            // Ajoutez ici les informations que vous souhaitez afficher
+                           
                             $creneauxDisponibles[$dateTravail][$creneauKey] = [
                                 'status' => 'Pris',
                                 'rdv' => $rdv,

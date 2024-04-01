@@ -22,6 +22,7 @@ class EmployerController extends AbstractController
        $user=$security->getUser();
        $userId=$user->getId();
     $edit=$entityManager->getRepository(Employer::class)->findOneBy(['user'=>$userId]);
+$fiche=$entityManager->getRepository(User::class)->findOneBy(['id'=>$userId]);
 
      
         $form=$this->createForm(EmployerType::class,$edit);
@@ -34,6 +35,7 @@ class EmployerController extends AbstractController
            return $this->render('employer/index.html.twig', [
             'controller_name' => 'EmployerController',
             'form'=>$form,
+            'fiche'=>$fiche,
         ]);
    
     

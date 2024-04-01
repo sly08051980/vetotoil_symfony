@@ -12,10 +12,26 @@
 				</div>
 			</div>
 		</div>
+		
        <div class="row justify-content-center">
          <div class="col-lg-6 ">
         <div class="card custom-box-shadow">
-   
+<div class="card mb-3">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img src="#" class="img-fluid rounded-start" alt="...">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{fiche.nom}} {{fiche.prenom}}</h5>
+        <p class="card-text">{{fiche.email}}</p>
+    <a href="#">modifier mot de passe</a>
+	<a href="#">modifier mes informations</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 	{{ form_errors(form) }}
 	{{ form_start(form) }}
 
