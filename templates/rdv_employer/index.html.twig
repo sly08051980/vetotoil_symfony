@@ -50,7 +50,18 @@
 
 								{% else %}
 									{{ info }}
-									<button type="button" class="btn btn-secondary">Ajouter</button>
+									{# <button type="button" class="btn btn-secondary"data-bs-toggle="modal" data-bs-target="#ajouter">Ajouter</button>
+									{% include 'rdv_employer/modal/ajouterrdv.html.twig' %} #}
+									<div class="col-lg-12">
+<form method="POST" action="{{ path('app_rdv_employer_ajouter') }}">
+<input type="hidden"name="heure" value="{{heure|slice(0,5)}}">
+<input type="hidden"name="date" value="{{date}}">
+<p>email</p><input type="email"name="ajouterRdv">
+<input type="submit" value="Rechercher">
+						</form>
+
+									</div>
+									
 								{% endif %}
 </div>
 							</div>
