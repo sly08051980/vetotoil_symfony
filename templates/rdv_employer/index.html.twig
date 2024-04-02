@@ -4,6 +4,11 @@
 {% endblock %}
 
 {% block body %}
+{% for message in app.flashes('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+{% endfor %}
 	<div class="container">
 		<div class="card custom-box-shadow p-3 mb-5 bg-body rounded">
 			<div class="row">
@@ -53,7 +58,7 @@
 									{# <button type="button" class="btn btn-secondary"data-bs-toggle="modal" data-bs-target="#ajouter">Ajouter</button>
 									{% include 'rdv_employer/modal/ajouterrdv.html.twig' %} #}
 									<div class="col-lg-12">
-<form method="POST" action="{{ path('app_rdv_employer_ajouter') }}">
+<form method="POST" action="{{ path('app_rdv_employer_ajouter') }}"data-turbo="false">
 <input type="hidden"name="heure" value="{{heure|slice(0,5)}}">
 <input type="hidden"name="date" value="{{date}}">
 <p>email</p><input type="email"name="ajouterRdv">

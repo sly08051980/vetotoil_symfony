@@ -13,7 +13,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class RdvType extends AbstractType
+class RdvPrisEmployerType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -22,21 +22,14 @@ class RdvType extends AbstractType
                 'widget' => 'single_text',
             ])
             ->add('heure_rdv', null, [
-                'text' => 'single_text',
+                'widget' => 'single_text',
             ])
             ->add('status_rdv')
             ->add('societe', EntityType::class, [
                 'class' => Societe::class,
                 'choice_label' => 'id',
             ])
-            ->add('animal', EntityType::class, [
-                'class' => Animal::class,
-                'choice_label' => 'id',
-            ])
-            ->add('animal', EntityType::class, [
-                'class' => Animal::class,
-                'choice_label' => 'prenom_animal',
-            ])
+          
             ->add('employer', EntityType::class, [
                 'class' => Employer::class,
                 'choice_label' => 'id',
@@ -45,6 +38,10 @@ class RdvType extends AbstractType
                 'class' => Patient::class,
                 'choice_label' => 'id',
             ])
+            ->add('submit', SubmitType::class,
+            ['label'=>'Valider'
+            ])
+            
         
         ;
     }

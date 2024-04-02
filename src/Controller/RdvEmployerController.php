@@ -80,10 +80,14 @@ $jours="Vos rdv jusqu'a la fin du mois";
                            
                             $patient = $rdv->getPatient();
                             $userPatient = $patient->getUser();
-                            $animal = $rdv->getAnimal();
-                            $animalPatient = $animal->getPrenomAnimal();
-                            $race = $animal->getRace();
-                            $type = $race->getType();
+                           
+                                $animal = $rdv->getAnimal();
+                            
+                                $animalPatient = $animal->getPrenomAnimal();
+                                $race = $animal->getRace();
+                                $type = $race->getType();
+                           
+                           
                             $societe=$rdv->getSociete();
                            
 
