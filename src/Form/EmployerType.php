@@ -18,6 +18,7 @@ use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\Regex;
+use Vich\UploaderBundle\Form\Type\VichImageType;
 
 class EmployerType extends AbstractType
 {
@@ -61,7 +62,13 @@ class EmployerType extends AbstractType
                 ],
                 'attr' => ['class' => 'form-select'],
             ])
-            ->add('images')
+            ->add('imageFile',VichImageType::class,[
+                'label'=>'Photo Employer',
+                'required' => false,
+                'label_attr'=>[
+                    'class'=>'form-label mt-4'
+                ]
+            ])
             ->add('date_creation_employer', DateType::class,[
                 'attr' => [
                     'hidden' => true,
@@ -79,11 +86,11 @@ class EmployerType extends AbstractType
             $user = $event->getData();
        
             
-            $user->setNom(validate_form($user->adresse_employer()));
-            $user->setPrenom(validate_form($user->complement_adresse_employer()));
-            $user->setPrenom(validate_form($user->code_postal_employer()));
-            $user->setPrenom(validate_form($user->ville_employer()));
-            $user->setPrenom(validate_form($user->telephone_employer()));
+            $user->setAdresseEmployer(validate_form($user->getAdresseEmployer()));
+            $user->setComplementAdresseEmployer(validate_form($user->getComplementAdresseEmployer()));
+            $user->setCodePostalEmployer(validate_form($user->getCodePostalEmployer()));
+            $user->setVilleEmployer(validate_form($user->getVilleEmployer()));
+            $user->setTelephoneEmployer(validate_form($user->getTelephoneEmployer()));
             $event->setData($user);
         });
 

@@ -29,13 +29,22 @@ class FullRegistrationController extends AbstractController
         $this->security = $security;
     }
     #[Route('/full/registration', name: 'app_full_registration')]
-    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository, EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
+    public function index(Security $security, PatientRepository $patientRepository, SocieteRepository $societeRepository,
+     EmployerRepository $employerRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
         $user = $security->getUser();
+        
         if ($user && in_array('ROLE_PATIENT', $user->getRoles())) {
             $patient = $patientRepository->findOneBy(['user' => $user]);
             if ($patient) {
-                return $this->redirectToRoute('app_home');
+                if($patient->getDateFinPatient() === null){
+
+                    return $this->redirectToRoute('app_home');
+                }else{
+                    $this->addFlash('info', 'Votre compte est désactivé');
+
+                    return $this->redirectToRoute('app_logout');
+                } 
             } else {
                 $user = new Patient();
                 $user->setDateCreationPatient(new \DateTime());
@@ -61,6 +70,7 @@ class FullRegistrationController extends AbstractController
             // }
             if ($societe) {
                 if ($societe->getDateValidationSociete() == null) {
+                    
                     return $this->render('full_registration/societeattente.html.twig', [
                         'controller_name' => 'HomeController',
                     ]);
@@ -94,7 +104,7 @@ class FullRegistrationController extends AbstractController
                 $user->setDateCreationEmployer(new \DateTime());
                 $users = $this->security->getUser();
                 $user->setUser($users);
-                $onglet='true';
+               
                 $form = $this->createForm(EmployerType::class, $user);
                 $form->handleRequest($request);
                 if ($form->isSubmitted() && $form->isValid()) {
@@ -113,4 +123,6 @@ class FullRegistrationController extends AbstractController
             'controller_name' => 'FullRegistrationController',
         ]);
     }
+
+   
 }

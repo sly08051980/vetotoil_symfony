@@ -3,6 +3,8 @@
 namespace App\Form;
 
 use App\Entity\User;
+use Karser\Recaptcha3Bundle\Form\Recaptcha3Type;
+use Karser\Recaptcha3Bundle\Validator\Constraints\Recaptcha3;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -65,7 +67,7 @@ class RegistrationFormType extends AbstractType
                         'message' => 'Please enter a password',
                     ]),
                     new Length([
-                        'min' => 6,
+                        'min' => 8,
                         'minMessage' => 'Your password should be at least {{ limit }} characters',
                         // max length allowed by Symfony for security reasons
                         'max' => 4096,
@@ -76,8 +78,9 @@ class RegistrationFormType extends AbstractType
             ['label'=>'Valider'
             ])
             ->add('roles', ChoiceType::class, [
+                'label' => false,
                 'attr' => [
-                    'hidden' => true,
+                    'class' => 'd-none',
                 ],
                 'choices' => [
                     'Patient' => 'ROLE_PATIENT',
@@ -89,7 +92,13 @@ class RegistrationFormType extends AbstractType
                 'multiple' => true,
                 'data' => $defaultRoles,
                
-            ]);
+            ])
+            ->add('captcha', Recaptcha3Type::class, [
+                'constraints' => new Recaptcha3(),
+                'action_name' => 'contact',
+              
+            ])
+            ;
             $builder->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                 $user = $event->getData();
            

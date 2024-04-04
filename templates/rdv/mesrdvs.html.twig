@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Historique de mes RDV{% endblock %}
+
+{% block body %}
+<div class="container pb-5 pt-5" id="inscription">
+    <div class="row justify-content-center mb-5">
+        <div class="col-12">
+            <div class="card custom-box-shadow py-5">
+                <h1 class="text-center">Historique de mes RDV</h1>
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="card custom-box-shadow mb-5 p-3">
+                <h2>Rendez-vous à venir</h2>
+                {% for rdv in rdvsFutur %}
+                <p>{{ rdv.dateRdv|date('Y-m-d') }} - {{ rdv.heureRdv|date('H:i') }} - {{ rdv.societe.nomSociete }}</p>
+                {% else %}
+                <p>Aucun rendez-vous à venir.</p>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="card custom-box-shadow mb-5 p-3">
+                <h2>Rendez-vous passés</h2>
+                {% for rdv in rdvsPasser %}
+                <p>{{ rdv.dateRdv|date('Y-m-d H:i') }} - {{ rdv.societe.nomSociete }}</p>
+                {% else %}
+                <p>Aucun rendez-vous passé.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -3,16 +3,23 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\UuidV7;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
+#[Vich\Uploadable]
 class Patient
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
   
 
@@ -31,6 +38,12 @@ class Patient
     #[ORM\Column(length: 10)]
     private ?string $telephone_patient = null;
 
+    #[Vich\UploadableField(mapping: 'product_images', fileNameProperty: 'imageName')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageName = null;
+
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_creation_patient = null;
 
@@ -40,7 +53,24 @@ class Patient
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     private ?User $user = null;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'patient')]
+    private Collection $rdvs;
+
+    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'patient')]
+    private Collection $soigners;
+
+    // #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'patient')]
+    // private Collection $animals;
+
+    public function __construct()
+    {
+        $this->animals = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
+        $this->soigners = new ArrayCollection();
+    }
+
+
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -106,6 +136,42 @@ class Patient
         return $this;
     }
 
+     /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
+    {
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+    }
+
+    public function getImageFile(): ?File
+    {
+        return $this->imageFile;
+    }
+
+    public function setImageName(?string $imageName): void
+    {
+        $this->imageName = $imageName;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
+    }
+
+
     public function getDateCreationPatient(): ?\DateTimeInterface
     {
         return $this->date_creation_patient;
@@ -138,6 +204,96 @@ class Patient
     public function setUser(?User $user): static
     {
         $this->user = $user;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Animal>
+     */
+    public function getAnimals(): Collection
+    {
+        return $this->animals;
+    }
+
+    public function addAnimal(Animal $animal): static
+    {
+        if (!$this->animals->contains($animal)) {
+            $this->animals->add($animal);
+            $animal->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimal(Animal $animal): static
+    {
+        if ($this->animals->removeElement($animal)) {
+            // set the owning side to null (unless already changed)
+            if ($animal->getPatient() === $this) {
+                $animal->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getPatient() === $this) {
+                $rdv->setPatient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Soigner>
+     */
+    public function getSoigners(): Collection
+    {
+        return $this->soigners;
+    }
+
+    public function addSoigner(Soigner $soigner): static
+    {
+        if (!$this->soigners->contains($soigner)) {
+            $this->soigners->add($soigner);
+            $soigner->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoigner(Soigner $soigner): static
+    {
+        if ($this->soigners->removeElement($soigner)) {
+            // set the owning side to null (unless already changed)
+            if ($soigner->getPatient() === $this) {
+                $soigner->setPatient(null);
+            }
+        }
 
         return $this;
     }

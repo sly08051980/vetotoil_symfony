@@ -7,14 +7,19 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Symfony\Component\Uid\UuidV7;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 #[ORM\Entity(repositoryClass: SocieteRepository::class)]
+#[Vich\Uploadable]
 class Societe
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 14)]
     private ?string $siret = null;
@@ -45,8 +50,12 @@ class Societe
     #[ORM\Column(length: 10)]
     private ?string $telephone_dirigeant = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $images = null;
+    #[Vich\UploadableField(mapping: 'societe_images', fileNameProperty: 'imageSociete')]
+    private ?File $imageFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $imageSociete = null;
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_creation_societe = null;
@@ -57,22 +66,28 @@ class Societe
     #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_validation_societe = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: User::class, inversedBy: 'societe', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: "user_id", referencedColumnName: "id", nullable: false)]
     private ?User $user = null;
 
     #[ORM\OneToMany(targetEntity: Ajouter::class, mappedBy: 'societe')]
     private Collection $ajouters;
 
+    #[ORM\OneToMany(targetEntity: Rdv::class, mappedBy: 'societe')]
+    private Collection $rdvs;
+
+    #[ORM\OneToMany(targetEntity: Soigner::class, mappedBy: 'societe')]
+    private Collection $soigners;
+
     public function __construct()
     {
         $this->ajouters = new ArrayCollection();
+        $this->rdvs = new ArrayCollection();
+        $this->soigners = new ArrayCollection();
     }
 
- 
 
-  
-
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -186,17 +201,43 @@ class Societe
         return $this;
     }
 
-    public function getImages(): ?string
+
+     /**
+     * If manually uploading a file (i.e. not using Symfony Form) ensure an instance
+     * of 'UploadedFile' is injected into this setter to trigger the update. If this
+     * bundle's configuration parameter 'inject_on_load' is set to 'true' this setter
+     * must be able to accept an instance of 'File' as the bundle will inject one here
+     * during Doctrine hydration.
+     *
+     * @param File|\Symfony\Component\HttpFoundation\File\UploadedFile|null $imageFile
+     */
+    public function setImageFile(?File $imageFile = null): void
     {
-        return $this->images;
+        $this->imageFile = $imageFile;
+
+        if (null !== $imageFile) {
+            // It is required that at least one field changes if you are using doctrine
+            // otherwise the event listeners won't be called and the file is lost
+            $this->updatedAt = new \DateTimeImmutable();
+        }
     }
 
-    public function setImages(?string $images): static
+    public function getImageFile(): ?File
     {
-        $this->images = $images;
-
-        return $this;
+        return $this->imageFile;
     }
+
+    public function setImageSociete(?string $imageSociete): void
+    {
+        $this->imageSociete = $imageSociete;
+    }
+
+    public function getImageSociete(): ?string
+    {
+        return $this->imageSociete;
+    }
+
+
 
     public function getDateCreationSociete(): ?\DateTimeInterface
     {
@@ -245,6 +286,98 @@ class Societe
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Ajouter>
+     */
+    public function getAjouters(): Collection
+    {
+        return $this->ajouters;
+    }
+
+    public function addAjouter(Ajouter $ajouter): static
+    {
+        if (!$this->ajouters->contains($ajouter)) {
+            $this->ajouters->add($ajouter);
+            $ajouter->setSociete($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAjouter(Ajouter $ajouter): static
+    {
+        if ($this->ajouters->removeElement($ajouter)) {
+            // set the owning side to null (unless already changed)
+            if ($ajouter->getSociete() === $this) {
+                $ajouter->setSociete(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Rdv>
+     */
+    public function getRdvs(): Collection
+    {
+        return $this->rdvs;
+    }
+
+    public function addRdv(Rdv $rdv): static
+    {
+        if (!$this->rdvs->contains($rdv)) {
+            $this->rdvs->add($rdv);
+            $rdv->setSociete($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRdv(Rdv $rdv): static
+    {
+        if ($this->rdvs->removeElement($rdv)) {
+            // set the owning side to null (unless already changed)
+            if ($rdv->getSociete() === $this) {
+                $rdv->setSociete(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Soigner>
+     */
+    public function getSoigners(): Collection
+    {
+        return $this->soigners;
+    }
+
+    public function addSoigner(Soigner $soigner): static
+    {
+        if (!$this->soigners->contains($soigner)) {
+            $this->soigners->add($soigner);
+            $soigner->setSociete($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSoigner(Soigner $soigner): static
+    {
+        if ($this->soigners->removeElement($soigner)) {
+            // set the owning side to null (unless already changed)
+            if ($soigner->getSociete() === $this) {
+                $soigner->setSociete(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
 
 }

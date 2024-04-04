@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Trouver un Rendez-vous{% endblock %}
+
+{% block body %}
+<div class="container">
+ <div class="row justify-content-center mb-5 mt-5">
+        <div class="col-12">
+            <div class="card custom-box-shadow py-5">
+                <h1 class="text-center">Trouver un Rendez-vous</h1>
+            </div>
+        </div>
+    </div>
+    
+
+    {% if disponibilites|length > 0 %}
+        
+            <div class="row">
+                {% for dispo in disponibilites %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card custom-box-shadow">
+                            <div class="card-header">
+                                Disponibilité : {{ dispo.date }} à {{ dispo.heure }}h00
+                            </div>
+                            <div class="card-body ">
+                                <h5 class="card-title">Professionel : {{ dispo.nom }} {{ dispo.prenom }}</h5>
+                                {% for societe in dispo.societes %}
+                                    <p class="card-text">
+                                        Société: {{ societe.nomSociete }}<br>
+                                        Adresse: {{ societe.adresseSociete }}, {{ societe.codePostalSociete }}
+                                    </p>
+                          
+                                
+                                <form method="POST" action="{{ path('app_rdv_valid') }}">
+                                    <input type="hidden" value="{{ dispo.employeId }}" name="employeId">
+                                    <input type="hidden" value="{{ userId }}" name="userId">
+                                    <input type="hidden" value="{{ societe.idSociete }}" name="societeId"> <!-- Assurez-vous que 'societe' est correctement défini. -->
+                                    <input type="hidden" value="{{ dispo.heure }}:00:00" name="heure">
+                                    <input type="hidden" value="{{ dispo.date }}" name="date">
+                                    <label for="animal-select-{{ loop.index }}">Choisissez un animal :</label>
+                                    <select id="animal-select-{{ loop.index }}" name="animal">
+                                        <option value="">--Veuillez choisir un animal--</option>
+                                        {% for animal in animaux %}
+                                            <option value="{{ animal.id }}">{{ animal.prenomAnimal }}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <div class="mt-3">
+                                        <input type="submit" value="Valider" class="btn btn-custom rounded-pill">
+                                    </div>
+                                </form>
+                                      {% endfor %}
+                                <form method="POST" action="{{ path('app_rdv_find_pro') }}">
+                                    <input type="hidden" value="{{ dispo.employeId }}" name="employeId">
+                                    <input type="hidden" value="{{ typePro }}" name="typePro">
+                                    <div class="mt-3">
+                                        <input type="submit" value="Voir plus" class="btn btn-custom rounded-pill">
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    {% else %}
+        <p>Aucune disponibilité trouvée pour les critères donnés.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,30 @@
+<div class="modal fade" id="ajouter" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalLabel">Information pour
+					</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="card">
+					<div class="card-header">
+						<p>Souhaitez vous prendre un rdv :
+						</p>
+						<p>{{ heure }}
+
+					</div>
+				</div>
+				<div class="modal-footer">
+               <form action="{{ path('app_rdv_employer_ajouter') }}" method="POST">
+    <input type="text" name="ajouterRdv">
+    <button type="submit" class="btn btn-primary">Rechercher</button>
+</form>
+
+					 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

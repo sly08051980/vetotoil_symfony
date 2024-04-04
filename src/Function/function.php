@@ -12,5 +12,8 @@ function email_form($data)
 {
     $data = trim($data);
     $data = htmlspecialchars($data);
+    $data = strtolower($data);
     return ($data);
 }
+
+

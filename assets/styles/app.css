@@ -1,9 +1,12 @@
 body {
     background-color: #FEFEE2;
+    /* background-color: black; */
 }
+
 .navbar,.footer {
     background: linear-gradient(white, purple);
 }
+
 .footer {
 
 	text-align: center;
@@ -50,6 +53,11 @@ h1,h2{
     font-style: italic;
     font-weight: 600;
 }
+.special {
+
+    font-size: 24px; 
+
+}
 strong{
     font-style: italic;
 }
@@ -67,6 +75,18 @@ color: white !important;
   fieldset{
     background-color: white;
   }
+  .inputsansbordure{
+    border: none; 
+    background-color: transparent;
+  }
+  .nav-item .nav-link {
+    color: inherit; 
+    text-decoration: none;
+}
+.nav-item .nav-link:hover {
+    color: white;
+  
+}
 @media only screen and (min-width: 1200px) {
     .degrader {
         background: linear-gradient(white, purple);
@@ -78,8 +98,8 @@ color: white !important;
         color: purple !important;
       
     }
-
-    
-
+    .grand{
+        font-size: 500%;
+    }
     
 }

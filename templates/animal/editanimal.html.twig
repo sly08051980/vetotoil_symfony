@@ -1,0 +1,18 @@
+
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Éditer Animal{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Éditer {{ animal.prenomAnimal }}</h1>
+
+    {{ form_start(form) }}
+        {{ form_widget(form) }}
+
+        <button type="submit" class="btn btn-primary">Sauvegarder</button>
+        <a href="{{ path('app_animal_find') }}" class="btn btn-secondary">Retour à la liste</a>
+    {{ form_end(form) }}
+</div>
+{% endblock %}

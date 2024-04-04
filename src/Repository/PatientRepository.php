@@ -45,4 +45,13 @@ class PatientRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findPatientByUser($user): ?Patient
+{
+    return $this->createQueryBuilder('p')
+        ->andWhere('p.user = :user')
+        ->setParameter('user', $user)
+        ->getQuery()
+        ->getOneOrNullResult();
+}
 }

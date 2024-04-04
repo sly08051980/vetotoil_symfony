@@ -17,7 +17,7 @@
 <div class="row pb-5 ">
 			<div class="card custom-box-shadow">
 				<div class="col-12 justify-content-center py-5">
-        <h1 class="text-center">Inscription</h1>
+        <h1 class="text-center">Connexion</h1>
         	</div>
 			</div>
 		</div>
@@ -30,15 +30,17 @@
         <input type="password" name="_password" id="password" class="form-control" autocomplete="current-password" required>
 
         <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}"
-        >
+               value="{{ csrf_token('authenticate') }}" >
+<a href="#">Mot de passe oublié</a>
+               <p class="mt-5"> Pas de compte inscrivez vous en cliquant <a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}">ici pour les particulier</a> ou <a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}">ici pour les professionnel</a></p>
 
-        <button class="btn btn-lg btn-primary" type="submit">
-            Sign in
+        <button class="btn btn-custom rounded-pill mt-5 mb-5" type="submit">
+            Connexion
         </button>
         </div>
          </div>
           </div>
     </form>
     </div>
+
 {% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello RdvController!
+{% endblock %}
+
+{% block body %}
+	{% set currentDate = "now" %}
+	<div class="container">
+		<div class="card">
+
+			<div class="row justify-content-center">
+
+
+				{% for i in 0..15 %}
+					{% for ajouters in ajouter %}
+						<div class="card ">
+						
+								<div class="card col-3">
+									<div class="form-group">{{ ajouters.getSociete().getNomSociete() }}</div>
+									<div>{{ ajouters.getSociete().getCodePostalSociete() }}</div>
+									<div>{{ ajouters.getSociete().getVilleSociete() }}</div>
+									<div>{{ ajouters.getEmployer().getUser().getNom() }}</div>
+								</div>
+								<div class="card"></div>
+
+
+								{% set currentDate = currentDate|date_modify("+1 day") %}
+								<div>{{ currentDate|date("Y-m-d") }}</div>
+
+								{% for rdvs in rdv %}
+
+									{% if ajouters.getEmployer().getId() == rdvs.getEmployer().getId() %}
+										<div>{{ rdvs.getDateRdv()|date('Y-m-d') }}</div>
+										<div>{{ rdvs.getHeureRdv()|date('H:i') }}</div>
+									{% endif %}
+								{% endfor %}
+
+								{% for jour in ajouters.getJoursTravailler() %}
+									<div c>{{ jour }}</div>
+									{% for heure in 8..17 %}
+										<div>{{ heure }}:00</div>
+									{% endfor %}
+								{% endfor %}
+							{% endfor %}
+						{% endfor %}
+
+					</div>
+				</div>
+			</div>
+		{% endblock %}

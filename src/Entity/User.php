@@ -3,19 +3,24 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\UuidV7;
+
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
@@ -38,7 +43,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 50)]
     private ?string $prenom = null;
 
-    public function getId(): ?int
+    #[ORM\OneToMany(targetEntity: Animal::class, mappedBy: 'user')]
+    private Collection $animals;
+    #[ORM\OneToOne(mappedBy: "user", cascade: ['persist', 'remove'])]
+ 
+private ?Societe $societe = null;
+
+
+#[ORM\OneToOne(mappedBy: "user", cascade: ['persist', 'remove'])]
+private ?Employer $employer = null;
+
+    public function __construct()
+    {
+        $this->animals = new ArrayCollection();
+    }
+
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
@@ -136,4 +156,58 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Animal>
+     */
+    public function getAnimals(): Collection
+    {
+        return $this->animals;
+    }
+
+    public function addAnimal(Animal $animal): static
+    {
+        if (!$this->animals->contains($animal)) {
+            $this->animals->add($animal);
+            $animal->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAnimal(Animal $animal): static
+    {
+        if ($this->animals->removeElement($animal)) {
+            // set the owning side to null (unless already changed)
+            if ($animal->getUser() === $this) {
+                $animal->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    public function getSociete(): ?Societe
+    {
+        return $this->societe;
+    }
+    
+    public function setSociete(?Societe $societe): self
+    {
+        $this->societe = $societe;
+    
+        return $this;
+    }
+    public function getEmployer(): ?Employer
+{
+    return $this->employer;
+}
+
+public function setEmployer(?Employer $employer): self
+{
+    $this->employer = $employer;
+
+    return $this;
+}
+
 }

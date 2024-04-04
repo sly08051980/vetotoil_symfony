@@ -8,8 +8,8 @@
 
 	<div class="row justify-content-center">
 		<div class="col-12 text-center position-relative">
-			<img src="{{ asset('img/photoaccueil.jpg') }}" alt="accueuil-vetotoil" class="mx-auto w-100">
-			<h1 class="position-absolute top-50 start-50 translate-middle" style="transform: translate(-50%, -50%); z-index: 1;">VETOTOIL</h1>
+			<img src="/images/img/photoaccueil.jpg" alt="accueil-vetotoil" class="mx-auto w-100">
+			<h1 class="position-absolute top-50 start-50 translate-middle grand" style="transform: translate(-50%, -50%); z-index: 1;">VETOTOIL</h1>
 			<p class="position-absolute top-50 start-50 translate-middle mt-5" style="transform: translate(-50%, 50%); z-index: 1;">Vous recherchez un
 				<span id="choix">Vétérinaire</span>
 			</p>
@@ -17,7 +17,11 @@
 	</div>
 	<div class="container" id="home">
 
-
+{% for message in app.flashes('info') %}
+    <div class="alert alert-info">
+        {{ message }}
+    </div>
+{% endfor %}
 		<fieldset class="border p-2 mb-4 mt-4 custom-box-shadow">
 			<legend class="float-none w-auto">
 				<strong>Particulier</strong>
@@ -26,15 +30,15 @@
 				<div class="col-12 col-md-3 m-md-3 mb-3 rounded-3 degrader col-lg-2">
 
 					<p>Facilitez la planification des rendez-vous pour le bien-être de votre compagnon adoré avec notre
-																												                service dédié.</p>
+					 service dédié.</p>
 				</div>
 				<div class="col-md-3 col-12 m-md-3 mb-3 rounded-3 degrader col-lg-2">
 					<p>Nous mettons à votre disposition une plateforme intuitive et conviviale pour organiser aisément
-																												                les rendez-vous nécessaires à la santé et au bonheur de votre animal préféré.</p>
+					les rendez-vous nécessaires à la santé et au bonheur de votre animal préféré.</p>
 				</div>
 				<div class="col-md-3 col-12 m-md-3 mb-3 rounded-3 degrader col-lg-2">
 					<p>Profitez d'une expérience simple et efficace, où chaque clic rapproche votre compagnon de soins
-																												                attentifs et personnalisés.</p>
+					attentifs et personnalisés.</p>
 				</div>
 			</div>
 
@@ -42,9 +46,8 @@
 				<div class="col-md-3 col-12 m-md-3 mb-3 rounded-3 degrader col-lg-2">
 
 
-					<p>
-						Parce que la santé de votre animal compte autant pour nous que pour vous, simplifiez la prise de
-																												                rendez-vous et offrez-lui une vie épanouissante</p>
+					<p>Parce que la santé de votre animal compte autant pour nous que pour vous, simplifiez la prise de
+						rendez-vous et offrez-lui une vie épanouissante</p>
 				</div>
 				<div class="col-md-3 col-12 m-md-3 mb-3 rounded-3 col-lg-2">
 					<div class="containerCarroussel ">
@@ -59,23 +62,23 @@
 							</div>
 							<div class="carousel-inner">
 								<div class="carousel-item active">
-									<img src="{{ asset('img/Chien chez le vétérinaire.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
+									<img src="/images/img/Chien_chez_le_vétérinaire.png" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
 								</div>
 								<div class="carousel-item">
-									<img src="{{ asset('img/dog at the groomer.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
+									<img src="/images/img/dog_at_the_groomer.png" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
 								</div>
 								<div class="carousel-item">
-									<img src="{{ asset('img/Chien chez le vétérinaire1.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
+									<img src="/images/img/Chien_chez_le_vétérinaire1.png" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
 								</div>
 								<div class="carousel-item">
-									<img src="{{ asset('img/dog at the groomer1.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
+									<img src="/images/img/dog_at_the_groomer1.png" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
 								</div>
 
 								<div class="carousel-item">
-									<img src="{{ asset('img/Chien chez le vétérinaire2.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
+									<img src="/images/img/Chien_chez_le_vétérinaire2.png" class="d-block w-100 rounded-3" alt="Chien chez le vétérinaire">
 								</div>
 								<div class="carousel-item">
-									<img src="{{ asset('img/dog at the groomer2.png') }}" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
+									<img src="/images/img/dog_at_the_groomer2.png" class="d-block w-100 rounded-3" alt="Chien chez le toiletteur">
 								</div>
 							</div>
 							<button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -110,12 +113,12 @@
 																																	                    fortement recommandés car ils servent à prévenir des maladies souvent mortelles.</p>
 					</div>
 					<div class="col-md-2 col-12 m-md-3 mb-3 d-none d-lg-block col-lg-2">
-						<img src="{{ asset('img/seringue.jpg') }}" class="img-fluid" width="500" height="300" alt="vetotoil image">
+						<img src="/images/img/seringue.jpg" class="img-fluid" width="500" height="300" alt="dessin de piqure">
 					</div>
 					<div
 						class="col-md-2 col-12 m-md-3 mb-3 d-md-block d-none col-lg-2">
 						<!--d-none cache en mobile d-md-block affiche version pc -->
-						<img src="{{ asset('img/ciseaux.jfif') }}" class="img-fluid" width="500" height="300" alt="vetotoil image">
+						<img src="/images/img/ciseaux.jfif" class="img-fluid" width="500" height="300" alt="ciseau pour toilettage">
 					</div>
 					<div class="col-md-3 col-12 m-md-3 mb-3 rounded-3 degrader col-lg-2">
 						<p>Le toilettage est une
@@ -129,13 +132,13 @@
 					
 									 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
     <input type="hidden" name="type" value="patient">
-    <button type="submit">Inscription</button>
+    <button type="submit" class="btn btn-custom rounded-pill">Inscription</button>
 </form>
 						</a>
 					</div>
 					<div class="col-md-4 col-12 text-center align-self-center pt-2">
-						{# <a href="{{ path('app_login') }}"> #}
-							<button type="button" class="btn btn-custom rounded-pill">Connexion</button>
+					
+							<a href="{{ path('app_login') }}" class="btn btn-custom rounded-pill">Connexion</a>
 						</a>
 					</div>
 				</div>
@@ -150,14 +153,14 @@
 
 			<div class="row justify-space-around center">
 				<div class="col-md-4 col-12 d-flex align-items-center">
-					<img src="{{ asset('img/montre.png') }}" class="taille-image">
+					<img src="/images/img/montre.png" class="taille-image" alt="image_montre">
 					<p class="ms-3 mt-4">
 						<strong>Libérez</strong>
 						du temps médical grâce à la prise de rendez-vous en ligne</p>
 				</div>
 
 				<div class="col-md-4 col-12 d-flex align-items-center">
-					<img src="{{ asset('img/oeil.png') }}" class="taille-image">
+					<img src="/images/img/oeil.png" class="taille-image" alt="image_oeil">
 					<p class="ms-3 pt-5">
 						<strong>Développez</strong>
 						l'activité de votre cabinet/salon selon vos besoins grâce à une meilleure visibilité en ligne</p>
@@ -165,7 +168,7 @@
 			</div>
 			<div class="row espace center">
 				<div class="col-md-4 col-12 d-flex align-items-center">
-					<img src="{{ asset('img/telephone.png') }}" class="taille-image">
+					<img src="/images/img/telephone.png" class="taille-image" alt="image_telephone">
 					<p class="ms-3 pt-5">
 						<strong>Gagnez</strong>
 						en confort de travail au quotidien en réduisant les appels téléphoniques à votre cabinet</p>
@@ -173,19 +176,18 @@
 			</div>
 		<div class="row justify-content-center">
     <div class="col-12 col-lg-4 text-center my-4">
-         {# <a href="{{ path('app_register_societe')}}" class="btn btn-custom rounded-pill">  #}
-		 {# <a href="{{ path('app_register') }}" class="btn btn-custom rounded-pill"> #}
+        
 		 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
     <input type="hidden" name="type" value="societe">
-    <button type="submit">Inscription pour Sociétés</button>
+    <button type="submit" class="btn btn-custom rounded-pill">Découvrir VETOTOIL Pour professionnel</button>
 </form>
-        Découvrir VETOTOIL Pour professionnel
+       
         {# </a> #}
     </div>
     <div class="col-12 col-lg-4 text-center my-4">
-        {# <a href="{{ path('app_societe_connexion')}}" class="btn btn-custom rounded-pill"> #}
-        Connexion Pour professionnel
-        {# </a> #}
+       
+		<a href="{{ path('app_login') }}" class="btn btn-custom rounded-pill">  Connexion Pour professionnel</a>
+
     </div>
 </div>
 		</fieldset>

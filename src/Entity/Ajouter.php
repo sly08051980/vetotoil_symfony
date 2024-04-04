@@ -5,17 +5,21 @@ namespace App\Entity;
 use App\Repository\AjouterRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\UuidV7;
 
 #[ORM\Entity(repositoryClass: AjouterRepository::class)]
 class Ajouter
 {
     #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\GeneratedValue('CUSTOM')]
+    #[ORM\Column(type: 'uuid',unique:true)]
+    #[ORM\CustomIdGenerator('doctrine.uuid_generator')]
+    private ?UuidV7 $id = null;
 
-    #[ORM\Column(length: 50)]
-    private ?string $jours_travailler = null;
+/**
+ * @ORM\Column(type="json")
+ */
+
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $date_entre_employer = null;
@@ -35,26 +39,29 @@ class Ajouter
     #[ORM\Column(type: Types::TIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $date_fin_repas = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Societe $societe = null;
+
+    #[ORM\ManyToOne(inversedBy: 'ajouters')]
+    private ?Employer $employer = null;
+
+    #[ORM\Column(type: Types::ARRAY, nullable: true)]
+    private ?array $jours_travailler = null;
+
+ 
+
   
 
 
 
-    public function getId(): ?int
+    public function getId(): ?UuidV7
     {
         return $this->id;
     }
 
-    public function getJoursTravailler(): ?string
-    {
-        return $this->jours_travailler;
-    }
 
-    public function setJoursTravailler(string $jours_travailler): static
-    {
-        $this->jours_travailler = $jours_travailler;
+    
 
-        return $this;
-    }
 
     public function getDateEntreEmployer(): ?\DateTimeInterface
     {
@@ -128,6 +135,41 @@ class Ajouter
         return $this;
     }
 
+    public function getSociete(): ?Societe
+    {
+        return $this->societe;
+    }
+
+    public function setSociete(?Societe $societe): static
+    {
+        $this->societe = $societe;
+
+        return $this;
+    }
+
+    public function getEmployer(): ?Employer
+    {
+        return $this->employer;
+    }
+
+    public function setEmployer(?Employer $employer): static
+    {
+        $this->employer = $employer;
+
+        return $this;
+    }
+
+    public function getJoursTravailler(): ?array
+    {
+        return $this->jours_travailler;
+    }
+
+    public function setJoursTravailler(?array $jours_travailler): static
+    {
+        $this->jours_travailler = $jours_travailler;
+
+        return $this;
+    }
 
 
  

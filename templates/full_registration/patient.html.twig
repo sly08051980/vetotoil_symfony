@@ -19,10 +19,13 @@
 			<div class="row justify-content-center">
 				<div class="col-lg-6">
 					{{ form_row(form.adresse_patient,{'label_attr': {'class': 'label-large'}}) }}
+	
+	<ul id="list"></ul></label>
 					{{ form_row(form.complement_adresse_patient,{'label_attr': {'class': 'label-large'}}) }}
-					{{ form_row(form.code_postal_patient,{'label_attr': {'class': 'label-large'}}) }}
-					{{ form_row(form.ville_patient,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row(form.code_postal_patient,{'label_attr': {'class': 'label-large'},'attr': {'id': 'codePostal'}}) }}
+					{{ form_row(form.ville_patient,{'label_attr': {'class': 'label-large'}, 'attr': {'id': 'ville'}}) }}
 					{{ form_row(form.telephone_patient,{'label_attr': {'class': 'label-large'}}) }}
+					{{ form_row (form.imageFile)}}
 	
 					{# {{ form_row(form.images,{'label_attr': {'class': 'label-large'}}) }} #}
 					{{ form_row(form.submit,{'label_attr': {'class': 'label-large'}}) }}
@@ -34,4 +37,8 @@
 		{{ form_end(form) }}
 
 	</div>
+	{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/adresse.js') }}" type="module" defer></script>
+{% endblock %}
 {% endblock %}

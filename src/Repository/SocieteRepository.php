@@ -45,4 +45,16 @@ class SocieteRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findSocieteByUser($user): ?Societe
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->where('s.user = :user')
+           ->setParameter('user', $user);
+
+        $query = $qb->getQuery();
+
+        return $query->getOneOrNullResult();
+    }
+    
 }
