@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
   //#################################################################################################
   //se lance sur page inscription
   //#################################################################################################
-
+ 
   let adresse = document.getElementById("patient_adresse_patient");
   let nbrLetter = 0;
   let ulListe = document.getElementById("list");

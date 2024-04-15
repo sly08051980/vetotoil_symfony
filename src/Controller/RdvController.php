@@ -19,7 +19,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_PATIENT', statusCode: 423)]
 class RdvController extends AbstractController
 {
     private Security $security;
@@ -28,7 +30,7 @@ class RdvController extends AbstractController
     {
         $this->security = $security;
     }
-
+  
     #[Route('/rdv/find/{typePro}', name: 'app_rdv_find')]
     public function index(Request $request, EntityManagerInterface $entityManager,$typePro): Response
     {

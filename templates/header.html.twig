@@ -24,10 +24,18 @@
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inscription</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<li>
-									<a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}" class="nav-link">Inscription Particulier</a>
+									{# <a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}" class="nav-link">Inscription Particulier</a> #}
+																		 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+    <input type="hidden" name="type" value="patient">
+    <button type="submit" class="btn">Inscription Particulier</button>
+</form>
 								</li>
 								<li>
-									<a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}" class="nav-link">Inscription Professionnel</a>
+									{# <a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}" class="nav-link">Inscription Professionnel</a> #}
+										 <form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+    <input type="hidden" name="type" value="societe">
+    <button type="submit" class="btn ">Inscription professionnel</button>
+</form>
 
 								</li>
 							</ul>
