@@ -30,7 +30,7 @@ class PatientController extends AbstractController
         $edit = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $userId]);
     
         if (!$edit) {
-            throw $this->createNotFoundException('Personne trouvée.');
+            throw $this->createNotFoundException('Personne non trouvée.');
         }
     
         $form = $this->createForm(PatientType::class, $edit);
