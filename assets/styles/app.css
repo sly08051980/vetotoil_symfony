@@ -5,6 +5,10 @@ body {
     font-family: 'Roboto', sans-serif;
   
 }
+.hidden-form-rdv{
+    display: none ;  
+}
+
 
 .navbar,.footer {
     background: linear-gradient(white, purple);
@@ -47,7 +51,7 @@ footer li a{
   padding-right: 1em;
 }
 
-h1,h2,strong,span{
+h1,h2,strong,span,label{
     color: purple;
   
 }

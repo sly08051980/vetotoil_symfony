@@ -90,7 +90,7 @@
 								</ul>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link" href="{{path('app_patient_profil')}}">Mon Profil</a>
+								<a class="nav-link" data-turbo="false" href="{{path('app_patient_profil')}}">Mon Profil</a>
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" href="{{ path('app_contact')}}">Contact</a>
@@ -149,11 +149,11 @@
 								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rdv</a>
 								<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
 									<li>
-										<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 7}) }}">Rdv sur 7 jours</a>
+										<a class="dropdown-item" data-turbo="false" href="{{ path('app_rdv_employer', {'jours': 7}) }}">Rdv sur 7 jours</a>
 
 									</li>
 									<li class="rdvMois">
-										<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 'mois'}) }}" id="rdvMoisLink">Rdv sur le mois</a>
+										<a class="dropdown-item" data-turbo="false" href="{{ path('app_rdv_employer', {'jours': 'mois'}) }}" id="rdvMoisLink">Rdv sur le mois</a>
 
 									</li>
 
@@ -165,7 +165,7 @@
 
 							</li>
 							<li class="nav-item">
-								<a href="{{ path('app_edit_employer',{'id':app.user.id}) }}" class="nav-link active" aria-current="page">Mon Profil</a>
+								<a href="{{ path('app_edit_employer',{'id':app.user.id}) }}" data-turbo="false" class="nav-link active" aria-current="page">Mon Profil</a>
 							</li>
 						{% endif %}
 					{% endif %}

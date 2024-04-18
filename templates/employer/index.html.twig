@@ -34,7 +34,18 @@
 
 	{{ form_errors(form) }}
 	{{ form_start(form) }}
-
+  	{{ form_row(form.adresse_employer)}}
+     	{{ form_row(form.complement_adresse_employer)}}
+       	{{ form_row(form.code_postal_employer)}}
+        	{{ form_row(form.ville_employer)}}
+            	{{ form_row(form.telephone_employer)}}
+     	{{ form_row(form.profession_employer)}}
+      	{{ form_row(form.imageFile)}}
+        	{{ form_row(form.date_creation_employer,{
+                     'label_attr': {'class': 'hidden-form-rdv'},
+                        'attr': {'class': 'hidden-form-rdv'}
+                    })}}
+	{{ form_widget(form.submit, {'attr': {'class': 'btn btn-custom rounded pill my-5'}}) }}
 	{{ form_end(form) }}
     </div>
     </div>
