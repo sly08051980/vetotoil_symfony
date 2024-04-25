@@ -1,4 +1,4 @@
-<div class="pb-5">
+<div class="pb-5" >
 	<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="navbar">
 		<div class="container-fluid">
 			<div class="d-flex align-items-center">
@@ -9,185 +9,199 @@
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
 				<span class="navbar-toggler-icon"></span>
 			</button>
+			<div class="form-check form-switch">
+				<input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+				<label class="form-check-label" for="flexSwitchCheckDefault">Mode Sombre</label>
+			</div>
 
 			<div class="collapse navbar-collapse" id="navbarScroll">
 				<ul class="navbar-nav ms-auto mb-2 mb-lg-0 mx-auto">
 					{% if not app.user %}
 
 						<li class="nav-item">
-							<a href="{{ path('app_home') }}" class="nav-link">Accueil</a>
+							<a href="{{ path('app_home') }}" class="nav-link" data-turbo="false">Accueil</a>
 						</li>
 						<li class="nav-item">
-							<a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+							<a href="{{ path('app_login') }}" class="nav-link" data-turbo="false">Connexion</a>
 						</li>
 						<li class="nav-item dropdown">
 							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Inscription</a>
 							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
 								<li>
-									<a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}" class="nav-link">Inscription Particulier</a>
-								</li>
-								<li>
-									<a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}" class="nav-link">Inscription Professionnel</a>
-
-								</li>
-							</ul>
-						</li>
-					
-					<li class="nav-item">
-						<a href="{{ path('app_contact')}}" class="nav-link">Contact</a>
-					</li>
-				{% endif %}
-				{% if app.user %}
-					{% set userRoles = app.user.getRoles() %}
-
-					<li class="nav-item">
-						<a href="#" class="nav-link active" aria-current="page">Accueil</a>
-					</li>
-					{% if 'ROLE_PATIENT' in userRoles %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">RDV</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li>
-									<a class="dropdown-item" href="{{ path('app_rdv_my_rdv')}}">Voir mes rdv</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Toiletteur'}) }}">Rechercher Toiletteur</a>
-
-								</li>
-								<li>
-									<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Vétérinaire'}) }}">Rechercher Vétérinaire</a>
-								</li>
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="#">Something else here</a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Animal</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<li>
-									<a class="dropdown-item" href="{{path('app_animal_ajouter')}}">Ajouter un animal</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="{{path('app_animal_find')}}">Afficher un animal</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">Suivi traitement</a>
-								</li>
-							</ul>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{path('app_patient_profil')}}">Mon Profil</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="{{ path('app_contact')}}">Contact</a>
-						</li>
-					{% endif %}
-					{% if 'ROLE_SOCIETE' in userRoles  %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employer</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
-								<li>
-									<a class="dropdown-item" href="?controller=pro&action=gestion_employer">Gestion des employés</a>
-								</li>
-								<li id="test">
-									<a href="#" class="dropdown-item" id="registerEmployerLink">Inscrire un Employer</a>
-
-									<form id="registerEmployerForm" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="display: none;">
-										<input type="hidden" name="type" value="employer">
+									{# <a href="{{ path('app_register', {'role': 'ROLE_PATIENT'}) }}" class="nav-link">Inscription Particulier</a> #}
+									<form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+										<input type="hidden" name="type" value="patient">
+										<button type="submit" class="btn">Inscription Particulier</button>
 									</form>
 								</li>
 								<li>
-									<a href="{{ path('employer_search') }}" class="dropdown-item">Ajouter Employer Par Email</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="?controller=pro&action=voir_tous_rdv_employer">Voir les RDV des employés</a>
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">Recherche RDV Employé</a>
-								</li>
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="#">Something else here</a>
+									{# <a href="{{ path('app_register', {'role': 'ROLE_SOCIETE'}) }}" class="nav-link">Inscription Professionnel</a> #}
+									<form action="{{ path('app_register') }}" method="POST" data-turbo="false">
+										<input type="hidden" name="type" value="societe">
+										<button type="submit" class="btn ">Inscription professionnel</button>
+									</form>
+
 								</li>
 							</ul>
 						</li>
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-								Société
-							</a>
-							<ul class="dropdown-menu " aria-labelledby="navbarDropdown">
-								<li>
-									<a class="dropdown-item" href="#">Modifier</a>
-								</li>
-								<li>
-									<hr class="dropdown-divider">
-								</li>
-								<li>
-									<a class="dropdown-item" href="#">Something else here</a>
-								</li>
-							</ul>
 
-						</li>
-
-					{% endif %}
-					{% if 'ROLE_EMPLOYER' in userRoles  %}
-						<li class="nav-item dropdown">
-							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rdv</a>
-							<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
-								<li>
-									<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 7}) }}">Rdv sur 7 jours</a>
-
-								</li>
-								<li class="rdvMois">
-									<a class="dropdown-item" href="{{ path('app_rdv_employer', {'jours': 'mois'}) }}" id="rdvMoisLink">Rdv sur le mois</a>
-
-								</li>
-
-								<li><hr class="dropdown-divider"></li>
-								<li>
-									<a class="dropdown-item" href="#">Something else here</a>
-								</li>
-							</ul>
-
-						</li>
 						<li class="nav-item">
-							<a href="{{ path('app_edit_employer',{'id':app.user.id}) }}" class="nav-link active" aria-current="page">Mon Profil</a>
+							<a href="{{ path('app_contact')}}" class="nav-link" data-turbo="false">Contact</a>
 						</li>
 					{% endif %}
-				{% endif %}
-
-			</ul>
-
-			<ul class="navbar-nav mb-2 mb-lg-0">
-				<li class="nav-item">
 					{% if app.user %}
 						{% set userRoles = app.user.getRoles() %}
-						{% if 'ROLE_ADMIN' in userRoles or 'ROLE_SOCIETE' in userRoles or 'ROLE_PATIENT' in userRoles or 'ROLE_EMPLOYER' in userRoles %}
-							<li class="nav-item">
-								<a class="nav-link active">Bonjour
-									{{ app.user.getNom() }}
-									{% if app.user.getPrenom() is not empty %}
-										{{ app.user.getPrenom() }}
-									{% endif %}
-								</a>
+
+						<li class="nav-item">
+							<a href="{{ path('app_home') }}" class="nav-link active" aria-current="page" data-turbo="false">Accueil</a>
+						</li>
+						{% if 'ROLE_PATIENT' in userRoles %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">RDV</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<li>
+										<a class="dropdown-item" href="{{ path('app_rdv_my_rdv')}}">Voir mes rdv</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Toiletteur'}) }}">Rechercher Toiletteur</a>
+
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ path('app_rdv_find', {'typePro': 'Vétérinaire'}) }}">Rechercher Vétérinaire</a>
+									</li>
+									<li><hr class="dropdown-divider"></li>
+									<li>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">Animal</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+									<li>
+										<a class="dropdown-item" href="{{path('app_animal_ajouter')}}">Ajouter un animal</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{path('app_animal_find')}}">Afficher un animal</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">Suivi traitement</a>
+									</li>
+								</ul>
 							</li>
 							<li class="nav-item">
-								<a href="{{ path('app_logout') }}"><img src="/images/img/deconnexion1.png" class="img-fluid" alt="vetotoil deconnexion"></a>
+								<a class="nav-link" data-turbo="false" href="{{path('app_patient_profil')}}">Mon Profil</a>
 							</li>
-						{% else %}
 							<li class="nav-item">
-								<a href="{{ path('app_login') }}"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
+								<a class="nav-link" href="{{ path('app_contact')}}">Contact</a>
 							</li>
 						{% endif %}
-					{% else %}
-						<li class="nav-item">
-							<a href="{{ path('app_login') }}"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
-						</li>
+						{% if 'ROLE_SOCIETE' in userRoles  %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Employé</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
+									<li>
+										<a class="dropdown-item" data-turbo="false"href="{{ path('app_societe_employer')}} ">Gestion des employés</a>
+									</li>
+									<li id="test">
+										<a href="#" class="dropdown-item" id="registerEmployerLink">Inscrire un Employé</a>
+
+										<form id="registerEmployerForm" action="{{ path('app_register') }}" method="POST" data-turbo="false" style="display: none;">
+											<input type="hidden" name="type" value="employer">
+										</form>
+									</li>
+									<li>
+										<a href="{{ path('employer_search') }}" class="dropdown-item"data-turbo="false">Ajouter Employer Par Email</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="{{ path ('app_societe_employer_rdv')}}" data-turbo="false">Voir les RDV des employés</a>
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">Recherche RDV Employé</a>
+									</li>
+									<li><hr class="dropdown-divider"></li>
+									<li>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</li>
+								</ul>
+							</li>
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+									Société
+								</a>
+								<ul class="dropdown-menu " aria-labelledby="navbarDropdown">
+									<li>
+										<a class="dropdown-item" href="{{ path('app_societe_profil') }}">Modifier</a>
+									</li>
+									<li>
+										<hr class="dropdown-divider">
+									</li>
+									<li>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</li>
+								</ul>
+
+							</li>
+
+						{% endif %}
+						{% if 'ROLE_EMPLOYER' in userRoles  %}
+							<li class="nav-item dropdown">
+								<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownSociete" role="button" data-bs-toggle="dropdown" aria-expanded="false">Rdv</a>
+								<ul class="dropdown-menu" aria-labelledby="navbarDropdownSociete">
+									<li>
+										<a class="dropdown-item" data-turbo="false" href="{{ path('app_rdv_employer', {'jours': 7}) }}">Rdv sur 7 jours</a>
+
+									</li>
+									<li class="rdvMois">
+										<a class="dropdown-item" data-turbo="false" href="{{ path('app_rdv_employer', {'jours': 'mois'}) }}" id="rdvMoisLink">Rdv sur le mois</a>
+
+									</li>
+
+									<li><hr class="dropdown-divider"></li>
+									<li>
+										<a class="dropdown-item" href="#">Something else here</a>
+									</li>
+								</ul>
+
+							</li>
+							<li class="nav-item">
+								<a href="{{ path('app_edit_employer',{'id':app.user.id}) }}" data-turbo="false" class="nav-link active" aria-current="page">Mon Profil</a>
+							</li>
+						{% endif %}
 					{% endif %}
-				</li>
-			</ul>
+
+				</ul>
+
+				<ul class="navbar-nav mb-2 mb-lg-0">
+					<li class="nav-item">
+						{% if app.user %}
+							{% set userRoles = app.user.getRoles() %}
+							{% if 'ROLE_ADMIN' in userRoles or 'ROLE_SOCIETE' in userRoles or 'ROLE_PATIENT' in userRoles or 'ROLE_EMPLOYER' in userRoles %}
+								<li class="nav-item">
+									<a class="nav-link active">Bonjour
+										{{ app.user.getNom() }}
+										{% if app.user.getPrenom() is not empty %}
+											{{ app.user.getPrenom() }}
+										{% endif %}
+									</a>
+								</li>
+								<li class="nav-item">
+									<a href="{{ path('app_logout') }}"data-turbo="false"><img src="/images/img/deconnexion1.png" class="img-fluid" alt="vetotoil deconnexion"></a>
+								</li>
+							{% else %}
+								<li class="nav-item">
+									<a href="{{ path('app_login') }}"data-turbo="false"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
+								</li>
+							{% endif %}
+						{% else %}
+							<li class="nav-item">
+								<a href="{{ path('app_login') }}"data-turbo="false"><img src="/images/img/connexion1.png" class="img-fluid" alt="vetotoil connexion"></a>
+							</li>
+						{% endif %}
+					</li>
+				</ul>
+			</div>
 		</div>
-	</div>
-</nav></div>
+	</nav>
+</div>
+

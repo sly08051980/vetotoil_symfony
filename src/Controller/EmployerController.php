@@ -59,11 +59,12 @@ class EmployerController extends AbstractController
 
       
         $rechercher = $entityManager->getRepository(User::class)->findOneBy(['email' => $ajouterRdv]);
-        if(!$rechercher){
-            $this->addFlash('info', 'Pas de patient trouvé.');
-            return $this->redirectToRoute('app_rdv_employer', ['jours' => 'mois']);
+        // if(!$rechercher){
+        //     $this->addFlash('info', 'Pas de patient trouvé.');
+        //     return $this->redirectToRoute('app_rdv_employer', ['jours' => 'mois']);
 
-        }
+        // }
+     
         $patient = $entityManager->getRepository(Patient::class)->findOneBy(['user' => $rechercher]);
         $user = $security->getUser();
         $userId = $user->getId();
@@ -101,6 +102,7 @@ class EmployerController extends AbstractController
         'controller_name' => 'EmployerController',
         'form' => $form,
         'animaux'=>$animal,
+        'rechercher'=>$rechercher,
         
     ]);
     }

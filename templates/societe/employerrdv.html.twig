@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Rendez-vous Employés{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+<div class="row justify-content-center mb-5">
+			<div class="row pb-5 ">
+				<div class="card custom-box-shadow">
+					<div class="col-12 justify-content-center py-5">
+						<h1 class="text-center">Rendez vous des Employes</h1>
+
+
+					</div>
+				</div>
+			</div>
+ </div>
+<div class="row">
+        {% for employer in employerDetails %}
+            <div class="col-md-4">
+                <div class="employer card custom-box-shadow">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ employer.nom }} {{ employer.prenom }}</h2>
+                        <div class="rdvs">
+                            <h3>Rendez-vous du jour :</h3>
+                            <ul>
+                                {% for heure, rdv in employer.rdvs %}
+                                    <li>
+                                        {{ heure }}h00 - 
+                                        {% if rdv == 'Libre' %}
+                                            <span class="text-success">{{ rdv }}</span>
+                                        {% else %}
+                                            <span class="text-danger">{{ rdv }}</span>
+                                        {% endif %}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

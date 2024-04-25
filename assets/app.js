@@ -9,3 +9,6 @@ import './bootstrap.js';
 import './styles/app.css';
 
 console.log('This log comes from assets/app.js - welcome to AssetMapper! 🎉');
+import '../assets/js/sombre.js'
+import '../assets/js/defilement.js'
+import '../assets/js/supprimer.js'

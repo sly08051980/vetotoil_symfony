@@ -1,0 +1,42 @@
+<div id="supprimer">
+<div class="modal fade" id="detailModal{{ detail.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title text-danger" id="exampleModalLabel">Vous êtes sur le point de supprimer
+				</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="card">
+					<div class="card-header">
+						<p>
+							{{detail.nom}}
+
+						</p>
+						<p>
+							{{detail.prenom}}</p>
+						<div class="row">
+							<div class="col-12 d-flex justify-content-between">
+								<div class="col">
+									<form method="POST" action="{{ path('app_societe_supprimer') }}" class="d-flex justify-content-center">
+										<input type="hidden" value="{{ detail.id }}" name="identifiant">
+										<input type="submit" id="valider1"  value="Valider" class="btn btn-danger rounded-pill " disabled>
+									</form>
+								</div>
+
+								<div class="col d-flex justify-content-center">
+									<button type="button" class="btn btn-custom rounded-pill" data-bs-dismiss="modal">Fermer</button>
+								</div>
+							</div>
+						</div>
+
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+

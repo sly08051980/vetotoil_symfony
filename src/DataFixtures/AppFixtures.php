@@ -12,6 +12,9 @@ class AppFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
+
+
+
         $types = ['Chien', 'Chat'];
 
         foreach ($types as $typeName) {

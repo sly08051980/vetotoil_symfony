@@ -1,20 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello SocieteController!{% endblock %}
+{% block title %}Liste des Employés{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+<div class="container">
+<div class="row justify-content-center mt-5 mb-5">
+			<div class="row pb-5 ">
+				<div class="card custom-box-shadow">
+					<div class="col-12 justify-content-center py-5">
+						<h1 class="text-center">Liste des Employés</h1>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/sregnier/Documents/projets-afpa/vetotoil_symfony/src/Controller/SocieteController.php</code></li>
-        <li>Your template at <code>C:/Users/sregnier/Documents/projets-afpa/vetotoil_symfony/templates/societe/index.html.twig</code></li>
-    </ul>
+					</div>
+				</div>
+			</div>
+ </div>
+  
+    <div class="row">
+        {% for detail in employerDetails %}
+            <div class="col-lg-6">
+                <div class="card lg-4 custom-box-shadow">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ detail.prenom }} {{ detail.nom }}</h5>
+                        <p class="card-text">Email: {{ detail.email }}</p>
+                        <p class="card-text">Adresse: {{ detail.adresse }}, {{ detail.complement_adresse }}, {{ detail.code_postal }}, {{ detail.ville }}</p>
+                        <p class="card-text">Téléphone: {{ detail.telephone }}</p>
+                        <p class="card-text">Profession: {{ detail.profession }}</p>
+                     
+                    </div>
+                    <div class="row justify-content-center">
+                    <div class="col-lg-4 ">
+                 <button type="button" class="btn btn-primary modalAction" data-bs-toggle="modal" data-bs-target="#detailModal{{ detail.id }}">Supprimer l'employé</button>
+                    {% include 'societe/modal/retirer.html.twig' with {'detail': detail} %}
+                    </div>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <p>Aucun employé trouvé.</p>
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
