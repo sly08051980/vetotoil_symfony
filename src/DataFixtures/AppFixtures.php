@@ -1,4 +1,5 @@
 <?php
+// php bin/console doctrine:database:create
 //  php bin/console doctrine:fixtures:load  
 namespace App\DataFixtures;
 
